@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lời Ru Trong Bóng Tối</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Literata:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+  :root{
+    --void: #0c0e0a;
+    --panel: #1a1d14;
+    --nursery-glow: #a8c26a;
+    --opila-pink: #d98a92;
+    --givanium: #8fd94f;
+    --chalk: #e8e6d8;
+    --chalk-dim: #9a9c8a;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--void);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(143,217,79,0.06), transparent 45%),
+      radial-gradient(ellipse at 80% 100%, rgba(217,138,146,0.05), transparent 50%);
+    color: var(--chalk);
+    font-family: 'Literata', serif;
+    line-height: 1.75;
+  }
+  .noise{
+    position: fixed; inset: 0; pointer-events: none; z-index: 5;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .hero{
+    position: relative;
+    min-height: 42vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 6vh 6vw 5vh;
+    border-bottom: 1px solid rgba(168,194,106,0.15);
+    overflow: hidden;
+  }
+  .hero::before{
+    content: "";
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(168,194,106,0.035) 39px, transparent 40px);
+    pointer-events: none;
+  }
+  .eyebrow{
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 0.78rem; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--nursery-glow); opacity: 0.75; margin-bottom: 1.2rem;
+  }
+  .title{
+    font-family: 'Baloo 2', sans-serif; font-weight: 800;
+    font-size: clamp(2rem, 6.5vw, 3.8rem);
+    color: var(--chalk); letter-spacing: 0.01em; margin: 0;
+    text-shadow: 0 0 28px rgba(168,194,106,0.28), 0 0 2px rgba(217,138,146,0.4);
+    animation: flicker 7s infinite;
+  }
+  @keyframes flicker{
+    0%, 3%, 6%, 100%{ opacity: 1; } 4%{ opacity: 0.55; } 5%{ opacity: 0.92; } 7%{ opacity: 0.7; } 8%{ opacity: 1; }
+  }
+  .subtitle{ margin-top: 1.1rem; font-style: italic; color: var(--chalk-dim); font-size: 0.98rem; max-width: 40ch; }
+
+  /* top-level tabs */
+  .tabs{
+    position: sticky; top: 0; z-index: 30;
+    display: flex; justify-content: center; gap: 0.5rem;
+    background: rgba(12,14,10,0.94);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(168,194,106,0.18);
+    padding: 0.9rem 1rem;
+    flex-wrap: wrap;
+  }
+  .tab-btn{
+    font-family: 'Baloo 2', sans-serif; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+    background: transparent; border: 1px solid rgba(232,230,216,0.15); color: var(--chalk-dim);
+    padding: 0.55rem 1.2rem; border-radius: 999px; cursor: pointer; transition: all 0.2s ease;
+  }
+  .tab-btn:hover{ color: var(--chalk); border-color: rgba(168,194,106,0.4); }
+  .tab-btn.active{ background: var(--nursery-glow); color: #10130c; border-color: var(--nursery-glow); font-weight: 700; }
+
+  .view{ display: none; max-width: 900px; margin: 0 auto; padding: 5vh 6vw 10vh; }
+  .view.active{ display: block; }
+
+  h1.section-title{ font-family: 'Baloo 2', sans-serif; font-size: clamp(1.6rem, 5vw, 2.3rem); text-align: center; margin-bottom: 0.6rem; }
+  .section-sub{ text-align: center; color: var(--chalk-dim); font-style: italic; margin-bottom: 3rem; font-size: 0.95rem; }
+
+  /* sub-tabs for Truyện (chapters) and Các Phần */
+  .sub-nav{ display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-bottom: 3.2rem; }
+  .sub-btn{
+    font-family: 'Baloo 2', sans-serif; font-size: 0.78rem;
+    background: var(--panel); border: 1px solid rgba(168,194,106,0.2); color: var(--chalk-dim);
+    padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
+  }
+  .sub-btn:hover{ border-color: var(--nursery-glow); color: var(--chalk); }
+  .sub-btn.active{ background: var(--nursery-glow); color: #10130c; font-weight: 700; border-color: var(--nursery-glow); }
+
+  .subview{ display: none; }
+  .subview.active{ display: block; animation: fadein 0.35s ease; }
+  @keyframes fadein{ from{ opacity:0; transform: translateY(6px);} to{ opacity:1; transform: translateY(0);} }
+
+  .chapter-eyebrow, article .chapter-eyebrow{
+    font-family: 'Baloo 2', sans-serif; font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--givanium); opacity: 0.7;
+  }
+  h2, article h2{
+    font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: clamp(1.4rem, 4vw, 1.9rem);
+    color: var(--chalk); margin: 0.5rem 0 2rem; border-bottom: 1px dashed rgba(168,194,106,0.25); padding-bottom: 1.1rem;
+  }
+  p, article p{ font-size: 1.04rem; color: #d7d5c6; margin: 0 0 1.3rem; }
+  p em, article p em{ color: var(--opila-pink); font-style: italic; }
+  p:has(em:only-child){ text-align: center; font-size: 1.1rem; padding: 0.4rem 0; }
+
+  blockquote.line{
+    margin: 2.2rem 0; padding: 1.1rem 1.4rem; border-left: 3px solid var(--opila-pink);
+    background: linear-gradient(90deg, rgba(217,138,146,0.08), transparent);
+    font-family: 'Baloo 2', sans-serif; font-size: 1.02rem; color: var(--opila-pink); letter-spacing: 0.01em;
+  }
+
+  .chap-footer{ display: flex; justify-content: space-between; margin-top: 3rem; font-family: 'Baloo 2', sans-serif; font-size: 0.85rem; }
+  .chap-footer button{
+    background: none; border: 1px solid rgba(168,194,106,0.25); color: var(--chalk-dim);
+    padding: 0.6rem 1.1rem; border-radius: 8px; cursor: pointer; font-family: inherit;
+  }
+  .chap-footer button:hover{ color: var(--chalk); border-color: var(--nursery-glow); }
+  .chap-footer button:disabled{ opacity: 0.25; cursor: default; }
+
+  .end-tag{
+    text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(168,194,106,0.12);
+    font-family: 'Baloo 2', sans-serif; letter-spacing: 0.3em; font-size: 0.8rem; color: var(--nursery-glow); opacity: 0.7;
+  }
+
+  .char-grid{ display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.4rem; }
+  .char-card{ background: var(--panel); border: 1px solid rgba(232,230,216,0.08); border-radius: 14px; padding: 1.6rem; border-top: 4px solid var(--accent, var(--nursery-glow)); }
+  .char-card .char-name{ font-family: 'Baloo 2', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--chalk); margin: 0 0 0.2rem; }
+  .char-card .char-role{ font-family: 'Baloo 2', sans-serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent, var(--nursery-glow)); margin-bottom: 1rem; }
+  .char-card .char-motto{ font-style: italic; color: var(--opila-pink); font-size: 0.9rem; border-left: 2px solid var(--accent, var(--opila-pink)); padding-left: 0.8rem; margin: 0 0 1rem; }
+  .char-card .char-desc{ font-size: 0.9rem; color: #c8c6b8; margin: 0; }
+
+  .part-list{ display: flex; flex-direction: column; gap: 1rem; }
+  .part-card{
+    background: var(--panel); border: 1px solid rgba(232,230,216,0.08); border-radius: 12px;
+    padding: 1.4rem 1.6rem; display: grid; grid-template-columns: 90px 1fr; gap: 1.2rem; align-items: start;
+    text-decoration: none; color: inherit; cursor: pointer;
+  }
+  .part-card:hover{ border-color: rgba(168,194,106,0.35); }
+  .part-num{ font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--nursery-glow); opacity: 0.8; }
+  .part-card h3{ font-family: 'Baloo 2', sans-serif; margin: 0 0 0.4rem; font-size: 1.05rem; color: var(--chalk); }
+  .part-card p{ margin: 0; font-size: 0.9rem; color: #c8c6b8; }
+  .part-tag{
+    display: inline-block; font-family: 'Baloo 2', sans-serif; font-size: 0.64rem; letter-spacing: 0.06em; text-transform: uppercase;
+    background: rgba(143,217,79,0.12); color: var(--givanium); padding: 0.15rem 0.55rem; border-radius: 999px; margin-bottom: 0.5rem;
+  }
+
+  .lore-box{ background: var(--panel); border: 1px solid rgba(217,138,146,0.2); border-radius: 12px; padding: 1.4rem 1.6rem; margin: 2rem 0; }
+  .lore-box .lore-title{ font-family: 'Baloo 2', sans-serif; font-size: 0.95rem; color: var(--opila-pink); margin: 0 0 0.7rem; letter-spacing: 0.02em; }
+  .lore-box p{ font-size: 0.92rem; color: #c8c6b8; margin: 0 0 0.8rem; }
+  .lore-box p:last-child{ margin-bottom: 0; }
+  .lore-box a{ color: var(--nursery-glow); }
+
+  .mural-diff{ display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+  .mural-diff > div{ background: rgba(0,0,0,0.2); border-radius: 10px; padding: 1rem; }
+  .mural-diff h4{ font-family: 'Baloo 2', sans-serif; font-size: 0.8rem; margin: 0 0 0.5rem; color: var(--nursery-glow); }
+  .mural-diff ul{ margin: 0; padding-left: 1.1rem; font-size: 0.85rem; color: #c8c6b8; }
+  .mural-diff li{ margin-bottom: 0.3rem; }
+
+  @media (max-width: 560px){
+    .part-card{ grid-template-columns: 1fr; }
+    .part-num{ font-size: 1.05rem; }
+    .mural-diff{ grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce){ .title{ animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+
+<section class="hero">
+  <div class="eyebrow">Banban Kindergarten &nbsp;·&nbsp; Case File</div>
+  <h1 class="title">Lời Ru Trong Bóng Tối</h1>
+  <p class="subtitle">Một buổi chiều đón con biến thành cơn ác mộng dưới lòng đất của Banban Kindergarten.</p>
+</section>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-view="home">Trang Chủ</button>
+  <button class="tab-btn" data-view="story">Truyện</button>
+  <button class="tab-btn" data-view="characters">Nhân Vật</button>
+  <button class="tab-btn" data-view="parts">Các Phần</button>
+</nav>
+
+<!-- ============ TRANG CHỦ ============ -->
+<div class="view active" id="view-home">
+  <h1 class="section-title">Sảnh Chính · Mural Room</h1>
+  <p class="section-sub">Nơi bắt đầu của mọi câu chuyện tại Banban Kindergarten.</p>
+
+  <div class="lore-box">
+    <div class="lore-title">Về bức tranh tường "Mural"</div>
+    <p>Ngay tại sảnh chính (Lobby / Entrance / Main Hall) của mỗi cơ sở Banban Kindergarten, luôn có một bức tranh tường khổng lồ vẽ đầy đủ các linh vật đứng cạnh nhau — cộng đồng người chơi gọi chung đó là <strong>Mural</strong> (hay <strong>Character Mural</strong>), và căn phòng chứa nó là <strong>Mural Room / Mural Wall</strong>.</p>
+    <p>Bức tranh này giới thiệu "đại gia đình" của trường — thường được gọi vui là <strong>Banban's Family</strong> hoặc <strong>Givanium Family</strong>. Mural không cố định qua từng phần: mỗi khi cơ sở "chào đón" thêm một mascot mới, bức tranh được vẽ bổ sung thêm — nhưng sáu gương mặt gốc xuất hiện từ Chapter 1 vẫn luôn là những hình vẽ hoàn hảo và được chăm chút nhất, không hề bị thay thế bởi các mascot thêm vào sau.</p>
+  </div>
+
+  <div class="part-list">
+    <div class="part-card" data-goto="story">
+      <div class="part-num">01</div>
+      <div>
+        <span class="part-tag">Đọc truyện</span>
+        <h3>Truyện: Lời Ru Trong Bóng Tối</h3>
+        <p>Theo chân Anamiya Yuki, 25 tuổi, một mình bước vào Banban Kindergarten sau khi con trai mất tích — 6 chương, còn tiếp.</p>
+      </div>
+    </div>
+    <div class="part-card" data-goto="characters">
+      <div class="part-num">02</div>
+      <div>
+        <span class="part-tag">Tra cứu</span>
+        <h3>Nhân Vật</h3>
+        <p>Hồ sơ đầy đủ các linh vật xuất hiện trên Mural và trong Phần 1–2 — tạo hình, khẩu hiệu, vai trò thật sự của từng con.</p>
+      </div>
+    </div>
+    <div class="part-card" data-goto="parts">
+      <div class="part-num">03</div>
+      <div>
+        <span class="part-tag">Bối cảnh gốc</span>
+        <h3>Các Phần Của Garten of Banban</h3>
+        <p>Tổng quan từng Phần trong series gốc, kèm ghi chú về sự thay đổi của Mural qua từng giai đoạn.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TRUYỆN ============ -->
+<div class="view" id="view-story">
+
+  <div class="sub-nav" id="chapNav" style="flex-direction:column; align-items:stretch; gap:0.8rem;">
+    <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center;">
+      <span style="font-family:'Baloo 2',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--givanium); opacity:0.8; width:100%; margin-bottom:0.2rem;">Phần 1</span>
+      <button class="sub-btn active" data-chap="1">Ch. 1</button>
+      <button class="sub-btn" data-chap="2">Ch. 2</button>
+      <button class="sub-btn" data-chap="3">Ch. 3</button>
+      <button class="sub-btn" data-chap="4">Ch. 4</button>
+      <button class="sub-btn" data-chap="5">Ch. 5</button>
+      <button class="sub-btn" data-chap="6">Ch. 6</button>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; border-top:1px dashed rgba(168,194,106,0.15); padding-top:0.7rem;">
+      <span style="font-family:'Baloo 2',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--givanium); opacity:0.8; width:100%; margin-bottom:0.2rem;">Phần 2</span>
+      <button class="sub-btn" data-chap="7">Ch. 7</button>
+      <button class="sub-btn" data-chap="8">Ch. 8</button>
+      <button class="sub-btn" data-chap="9">Ch. 9</button>
+      <button class="sub-btn" data-chap="10">Ch. 10</button>
+      <button class="sub-btn" data-chap="11">Ch. 11</button>
+      <button class="sub-btn" data-chap="12">Ch. 12</button>
+      <button class="sub-btn" data-chap="13">Ch. 13</button>
+      <button class="sub-btn" data-chap="14">Ch. 14</button>
+      <button class="sub-btn" data-chap="15">Ch. 15</button>
+      <button class="sub-btn" data-chap="16">Ch. 16</button>
+      <button class="sub-btn" data-chap="17">Ch. 17</button>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; border-top:1px dashed rgba(168,194,106,0.15); padding-top:0.7rem;">
+      <span style="font-family:'Baloo 2',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--givanium); opacity:0.8; width:100%; margin-bottom:0.2rem;">Phần 3</span>
+      <button class="sub-btn" data-chap="18">Ch. 18</button>
+      <button class="sub-btn" data-chap="19">Ch. 19</button>
+      <button class="sub-btn" data-chap="20">Ch. 20</button>
+      <button class="sub-btn" data-chap="21">Ch. 21</button>
+      <button class="sub-btn" data-chap="22">Ch. 22</button>
+      <button class="sub-btn" data-chap="23">Ch. 23</button>
+      <button class="sub-btn" data-chap="24">Ch. 24</button>
+      <button class="sub-btn" data-chap="25">Ch. 25</button>
+      <button class="sub-btn" data-chap="26">Ch. 26</button>
+      <button class="sub-btn" data-chap="27">Ch. 27</button>
+      <button class="sub-btn" data-chap="28">Ch. 28</button>
+      <button class="sub-btn" data-chap="29">Ch. 29</button>
+      <button class="sub-btn" data-chap="30">Ch. 30</button>
+      <button class="sub-btn" data-chap="31">Ch. 31</button>
+      <button class="sub-btn" data-chap="32">Ch. 32</button>
+      <button class="sub-btn" data-chap="33">Ch. 33</button>
+      <button class="sub-btn" data-chap="34">Ch. 34</button>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; border-top:1px dashed rgba(168,194,106,0.15); padding-top:0.7rem;">
+      <span style="font-family:'Baloo 2',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--givanium); opacity:0.8; width:100%; margin-bottom:0.2rem;">Phần 4</span>
+      <button class="sub-btn" data-chap="35">Ch. 35</button>
+      <button class="sub-btn" data-chap="36">Ch. 36</button>
+      <button class="sub-btn" data-chap="37">Ch. 37</button>
+      <button class="sub-btn" data-chap="38">Ch. 38</button>
+      <button class="sub-btn" data-chap="39">Ch. 39</button>
+      <button class="sub-btn" data-chap="40">Ch. 40</button>
+      <button class="sub-btn" data-chap="41">Ch. 41</button>
+      <button class="sub-btn" data-chap="42">Ch. 42</button>
+      <button class="sub-btn" data-chap="43">Ch. 43</button>
+      <button class="sub-btn" data-chap="44">Ch. 44</button>
+      <button class="sub-btn" data-chap="45">Ch. 45</button>
+      <button class="sub-btn" data-chap="46">Ch. 46</button>
+      <button class="sub-btn" data-chap="47">Ch. 47</button>
+      <button class="sub-btn" data-chap="48">Ch. 48</button>
+      <button class="sub-btn" data-chap="49">Ch. 49</button>
+      <button class="sub-btn" data-chap="50">Ch. 50</button>
+      <button class="sub-btn" data-chap="51">Ch. 51</button>
+      <button class="sub-btn" data-chap="52">Ch. 52</button>
+      <button class="sub-btn" data-chap="53">Ch. 53</button>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; border-top:1px dashed rgba(168,194,106,0.15); padding-top:0.7rem;">
+      <span style="font-family:'Baloo 2',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--givanium); opacity:0.8; width:100%; margin-bottom:0.2rem;">Phần 6</span>
+      <button class="sub-btn" data-chap="54">Ch. 54</button>
+      <button class="sub-btn" data-chap="55">Ch. 55</button>
+      <button class="sub-btn" data-chap="56">Ch. 56</button>
+      <button class="sub-btn" data-chap="57">Ch. 57</button>
+      <button class="sub-btn" data-chap="58">Ch. 58</button>
+      <button class="sub-btn" data-chap="59">Ch. 59</button>
+      <button class="sub-btn" data-chap="60">Ch. 60</button>
+      <button class="sub-btn" data-chap="61">Ch. 61</button>
+      <button class="sub-btn" data-chap="62">Ch. 62</button>
+      <button class="sub-btn" data-chap="63">Ch. 63</button>
+      <button class="sub-btn" data-chap="64">Ch. 64</button>
+      <button class="sub-btn" data-chap="65">Ch. 65</button>
+    </div>
+  </div>
+
+  <article class="subview active" id="chap-1">
+    <div class="chapter-eyebrow">Chương 01</div>
+    <h2>Buổi Chiều Định Mệnh</h2>
+    <p>Anamiya Yuki đẩy cửa kính bước vào sân trường mẫu giáo Banban Kindergarten như mọi buổi chiều thứ Sáu khác. Cô 25 tuổi, làm kế toán ở một công ty nhỏ trong thành phố, và ba năm nay chưa từng trễ giờ đón con dù chỉ một lần.</p>
+    <p>Nhưng hôm nay có gì đó khác.</p>
+    <p>Sân trường vắng tanh. Không tiếng trẻ con cười đùa, không tiếng cô giáo gọi tên học sinh xếp hàng ra về. Chỉ có tiếng xích đu kẽo kẹt tự đung đưa trong gió, và một bài hát ru phát ra từ chiếc loa gắn trên cổng trường — giai điệu ngọt ngào nhưng méo mó, như thể ai đó đang hát nó qua một lớp nước.</p>
+    <p>Yuki gọi tên con, giọng bắt đầu run, rồi gọi lại lần nữa, to hơn, vọng vào khoảng sân trống trải không một tiếng đáp lời.</p>
+    <p>Cánh cửa chính của tòa nhà mẫu giáo hé mở. Bên trong tối om, dù giờ này đáng lẽ đèn phải sáng trưng như mọi ngày.</p>
+    <p>Cô rút điện thoại gọi cho cô giáo chủ nhiệm. Không ai bắt máy. Gọi cho nhà trường. Tút dài vô tận. Yuki nhìn quanh, tim đập thình thịch, rồi bước qua cánh cổng, vào trong sân, tiến về phía cánh cửa tối đen đang chờ sẵn.</p>
+    <p>Ngay khi bàn chân cô chạm qua ngưỡng cổng, một cơn gió lạnh buốt bất chợt lướt qua gáy cô, dù không khí chiều hôm đó vốn chẳng hề se lạnh. Yuki khựng lại, quay phắt ra sau. Sân trường trống không, chỉ có chiếc xích đu vẫn kẽo kẹt đung đưa một mình. Không một bóng người. Tim cô đập dồn dập, nhưng phía trước, cánh cửa tối đen của tòa nhà vẫn đang chờ, và con cô vẫn còn ở đâu đó bên trong. Cô nuốt khan, quay lưng lại với khoảng sân vắng lặng, và bước tiếp vào bóng tối.</p>
+    <div class="chap-footer"><button disabled>← Trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-2">
+    <div class="chapter-eyebrow">Chương 02</div>
+    <h2>Sảnh Chính</h2>
+    <p>Bên trong, hành lang mẫu giáo dài hơn Yuki nhớ. Những bức tranh tường quen thuộc phủ kín hai bên lối đi — hình chú thỏ mặc yếm hồng, chú gấu ôm quả bóng, chú voi cầm bình tưới cây — nét vẽ tròn trịa, ngộ nghĩnh, rực rỡ sắc màu như mọi trường mẫu giáo khác. Nhưng trong bóng tối lúc này, ánh mắt của chúng như đang dõi theo cô suốt dọc hành lang.</p>
+    <p>Hành lang mở ra một sảnh rộng — tấm biển mờ chữ trên cửa còn đọc được: "Lobby". Chiếm trọn bức tường chính diện là một bức tranh khổng lồ, dài gần bằng cả căn phòng: toàn bộ các linh vật của trường đứng thành một hàng, vai kề vai, mỗi con đều có khung thoại bong bóng riêng bay ra từ miệng, như một tấm ảnh gia đình được phóng to.</p>
+    <p>Một quái vật cơ bắp khổng lồ màu xanh lá, nụ cười toe toét, giơ nắm đấm đầy tự hào, khung thoại ghi: <em>"Eat vegetables and fruits to become strong like me!"</em> Kế bên là một sinh vật hình người màu đỏ với hai chiếc sừng nhỏ trên đầu đứng khoanh tay, khung thoại ghi: <em>"Sharing is caring! Your pancreas is mine."</em> Cạnh đó, phiên bản màu trắng của nó, mặc váy nơ, đóng vai cô giáo, nói: <em>"Kindness is your best asset!"</em> Xa hơn một chút, một con quái vật dạng sứa màu cam với một con mắt to duy nhất, sáu cánh tay dang rộng, khoe khẩu hiệu: <em>"Having 6 arms allows me to help much more people!"</em> Cuối dãy là một sinh vật nhỏ nhắn màu xanh tím, tròn trịa như một khối bông, chỉ vỏn vẹn một chữ trong khung thoại: <em>"Oooof!"</em></p>
+    <p>Yuki rảo bước qua bức tranh gia đình ấy, không có thời gian để ý kỹ — dù có gì đó trong những nụ cười cứng đờ khiến gáy cô nổi da gà.</p>
+    <p>Cuối hành lang, cô bước vào một căn phòng rộng đề biển "Playroom" trên cửa. Ngay giữa tường, một bức tranh riêng vẽ hình chú chim hồng hạc to lớn, dáng đứng đáng yêu, chiếc mỏ vàng cam cong cong, miệng cười tươi. Từ khóe mỏ của nó vẽ ra một khung thoại bong bóng kiểu truyện tranh, bên trong ghi dòng chữ nắn nót:</p>
+    <p><em>"Laughter is the best medicine."</em></p>
+    <p>Chính giữa phòng là một mô hình chim hồng hạc cỡ lớn giống hệt trong tranh — thân hình màu hồng nhạt, cổ dài ngoằng, đôi chân mảnh khảnh kiểu chim chạy, chiếc mỏ nhọn màu vàng cam há sẵn như đang chờ được cho ăn. Đôi mắt tròn đen của nó nhìn thẳng về phía trước, hoàn toàn vô hồn, bất động.</p>
+    <p>Yuki men theo tường, không dám lại gần mô hình. Trên sàn, gần một góc phòng, cô nhìn thấy một chiếc giày nhỏ màu xanh nằm lăn lóc — đúng đôi giày cô đã mua cho con tuần trước.</p>
+    <p>Nỗi sợ trong lòng Yuki bỗng nhường chỗ cho một thứ mạnh mẽ hơn: quyết tâm. Cô nhặt chiếc giày lên, nắm chặt trong tay như một lá bùa. Trên bức tường đối diện, một cánh cửa sắt nặng nề, cạnh khung cửa gắn một ô cảm biến nhỏ phát sáng màu vàng nhạt — kiểu ổ khóa chỉ mở được bằng thẻ từ cùng màu.</p>
+    <p>Trên chiếc bàn nhỏ sát tường, một thiết bị điều khiển cầm tay nằm chỏng chơ bên cạnh một chiếc drone đồ chơi cỡ lòng bàn tay, trông còn khá mới. Yuki cầm thiết bị lên, ngón tay lướt qua các nút bấm — có vẻ nó dùng để điều khiển drone bay lên những chỗ cao mà người lớn không với tới.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-3">
+    <div class="chapter-eyebrow">Chương 03</div>
+    <h2>Sáu Quả Trứng</h2>
+    <p>Yuki nhận ra căn phòng không hề trống rỗng như cô tưởng. Trên các kệ cao gắn khắp bốn bức tường là những chiếc công tắc nhỏ nằm ngoài tầm với, mỗi cái gắn với một hộp nhựa trong suốt đựng một quả trứng đồ chơi sặc sỡ. Bên cạnh mô hình chim hồng hạc, một tấm biển hướng dẫn còn khá mới viết:</p>
+    <p><em>"Cho Opila Bird ăn đủ 6 quả trứng để nhận thẻ ra."</em></p>
+    <p>Yuki thả chiếc drone lên không trung, hai tay run run điều khiển nó bay là là dọc theo các bức tường, dùng cánh quạt húc nhẹ vào từng công tắc một. Mỗi lần trúng đích, một quả trứng nhựa lại rơi xuống khay hứng bên dưới với tiếng lách cách khô khốc. Cô nhặt từng quả, tay run lên vì phải đi lại gần cái mỏ vàng cam há sẵn kia hơn.</p>
+    <p>Một quả trứng xanh. Một quả đỏ. Một quả vàng. Một quả tím. Một quả cam. Cuối cùng là quả trứng hồng.</p>
+    <p>Yuki hít một hơi thật sâu, bước tới gần mô hình, và lần lượt thả từng quả trứng vào chiếc mỏ đang há rộng. Sau quả trứng thứ sáu, cả căn phòng bỗng rung lên khe khẽ. Mô hình chim hồng hạc phát ra một tiếng cót két như đang "nuốt" xuống, rồi từ phía dưới đuôi nó, một chiếc thẻ từ màu vàng trượt ra, rơi xuống sàn với tiếng lanh canh.</p>
+    <p>Yuki vội nhặt thẻ, áp mặt vàng của nó vào ô cảm biến cạnh cửa sắt — cùng màu với thẻ trong tay. Đèn cảm biến chớp xanh, cánh cửa mở ra, dẫn vào một lối đi tối hơn, ẩm hơn. Cô bỏ tấm thẻ vàng vào túi áo, đoán rằng phía trước có thể còn những cánh cửa khác, mỗi cái sẽ cần đúng màu thẻ tương ứng mới mở được.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-4">
+    <div class="chapter-eyebrow">Chương 04</div>
+    <h2>Con Đường Trên Vực</h2>
+    <p>Sau cánh cửa là một khu vực hoàn toàn khác — không còn giống lớp học nữa, mà giống một đường hầm xây dựng dở dang. Sàn nhà đã biến mất, thay vào đó là một vực sâu tối đen, bắc ngang qua là những tấm ván gỗ mỏng manh nối các mảng bê tông rải rác, y hệt một con đường chạy việt dã bị bỏ hoang.</p>
+    <p>Từ phía xa vọng lại tiếng khóc thút thít quen thuộc.</p>
+    <blockquote class="line">"Mẹ ơi!"</blockquote>
+    <p>Tiếng con trai vang lên khiến mọi nỗi sợ trong Yuki tan biến. Cô bước lên tấm ván đầu tiên, hai tay dang ra giữ thăng bằng, mắt không rời khỏi bờ bên kia vực. Tiếng khóc dẫn cô đi hết tấm ván này đến tấm ván khác, nhưng nó cứ như lùi xa dần mỗi khi cô tưởng mình đã đến gần — vọng từ bên trái, rồi lại vọng từ bên phải, như thể cả con đường này được xây ra chỉ để đánh lừa một người mẹ đang hoảng loạn.</p>
+    <p>Yuki liếc lại phía Playroom sau lưng qua cánh cửa đã khép — mô hình chim hồng hạc đứng đó không còn nữa. Bệ đỡ của nó trống trơn.</p>
+    <p>Tim cô lạnh toát.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-5">
+    <div class="chapter-eyebrow">Chương 05</div>
+    <h2>Cuộc Rượt Đuổi</h2>
+    <p>Một tiếng hú the thé xé toạc sự tĩnh lặng. Ở đầu con đường phía trước, Opila Bird đứng sừng sững — không còn là mô hình vô hồn nữa. Đôi mắt tròn đen giờ rực lên một thứ ánh sáng đỏ trắng dữ tợn, chiếc mỏ vàng cam há rộng phát ra tiếng rít chói tai, và nó lao thẳng về phía Yuki với tốc độ của một cơn lốc.</p>
+    <p>Yuki không có thời gian để sợ hãi. Cô nhảy.</p>
+    <p>Từng tấm ván gỗ rung lên dưới chân khi cô lao qua, cố giữ nhịp, không dám nhìn xuống vực thẳm bên dưới. Một lần trượt chân suýt khiến cô rơi, nhưng cô kịp bám lấy mép một mảng bê tông, kéo mình lên đúng lúc chiếc mỏ nhọn hoắt sượt qua sau lưng chỉ trong gang tấc.</p>
+    <p>Tiếng rít của Opila Bird vang vọng khắp đường hầm, gần hơn, gần hơn nữa. Yuki chạy, nhảy, lăn qua từng tấm ván, phổi như muốn nổ tung, cho đến khi cô nhìn thấy nó — một chiếc công tắc lớn màu đỏ gắn trên cột bê tông ở cuối con đường.</p>
+    <p>Cô lao tới bằng những bước chân cuối cùng, và ngay khi Opila Bird vươn cổ chuẩn bị mổ xuống, Yuki đập mạnh tay vào công tắc.</p>
+    <p>Tấm ván ngay dưới chân con quái vật sập xuống. Nó mất đà, đôi cánh nhỏ vô dụng đập loạn xạ trong không khí, và cùng với một tiếng hú kéo dài, Opila Bird rơi thẳng xuống vực thẳm tăm tối, tiếng va đập cuối cùng tắt lịm rất xa bên dưới.</p>
+    <p>Yuki quỵ xuống bên mép vực, thở hổn hển, tay vẫn còn run lên vì vừa thoát chết.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-6">
+    <div class="chapter-eyebrow">Chương 06</div>
+    <h2>Thang Máy</h2>
+    <p>Yuki lồm cồm đứng dậy, len lỏi qua nốt đoạn đường ván còn lại để tới một khoảng sân bê tông nhỏ ở cuối đường hầm. Cô gọi tên con, giọng khản đặc, nhưng chỉ có tiếng vọng đáp lại.</p>
+    <p>Trong căn phòng tiếp theo, ánh đèn khẩn cấp màu đỏ chiếu sáng đều trên trần. Trên một chiếc bàn kim loại ở giữa phòng, một chiếc thẻ từ màu đỏ nằm chỏng chơ, cạnh một tấm biển ghi:</p>
+    <p><em>"Thang máy chính — Truy cập tầng ngầm."</em></p>
+    <p>Yuki nhặt thẻ, bước tới cánh cửa thang máy lớn ở cuối phòng. Cô áp thẻ đỏ vào ô cảm biến cùng màu; cánh cửa kim loại trượt mở với một tiếng rít khô khốc. Bên trong cabin sáng rõ, đèn trần vẫn hoạt động bình thường, như thể khu vực này mới được sử dụng gần đây.</p>
+    <p>Cô không tìm thấy con. Chưa tìm thấy. Nhưng nếu tầng ngầm là nơi duy nhất còn lại chưa được lục soát, thì đó là nơi cô phải đến.</p>
+    <p>Yuki bước vào cabin, bấm nút xuống. Cánh cửa đóng sầm lại sau lưng cô, và thang máy bắt đầu hạ xuống, từ từ chìm vào một khoảng không đen kịt không đáy.</p>
+    <p>Được vài giây, một tiếng rung chuyển dữ dội truyền khắp cabin, khiến Yuki loạng choạng ngã dúi vào vách thang máy. Qua khe cửa kim loại, một bàn tay khổng lồ màu xanh lá cây bất ngờ thò ra từ bóng tối bên ngoài — những ngón tay to như thân cây, móng tay sứt mẻ — và đập cực mạnh vào thành cabin.</p>
+    <p>Cabin rung lên bần bật. Tiếng dây cáp đứt phựt một cách rợn người vang lên phía trên đầu.</p>
+    <p>Yuki chỉ kịp ôm lấy đầu, lưng ép sát vào góc cabin, trước khi cả chiếc thang máy rơi tự do xuống khoảng tối không đáy, tiếng gió rít bên tai hòa lẫn tiếng kim loại nghiến ken két.</p>
+    <p>Màn hình trước mắt cô vụt tắt.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-7">
+    <div class="chapter-eyebrow">Chương 07</div>
+    <h2>Nền Nâng Công Nhân</h2>
+    <p>Yuki tỉnh dậy trong bóng tối đặc quánh, mùi bê tông ẩm và kim loại lạnh xộc thẳng vào mũi. Cơ thể cô đau nhức khắp nơi, nhưng trước tiên là cảm giác kỳ lạ dưới lưng — một bề mặt kim loại gồ ghề, hơi ấm, và phập phồng rất khẽ như đang thở.</p>
+    <p>Cô lồm cồm bò dậy, và khi mắt dần quen với thứ ánh sáng lờ mờ từ những ống đèn khẩn cấp treo lơ lửng trên trần, cô nhận ra mình vừa nằm trên một tấm nền nâng công nhân bằng thép — loại dùng để di chuyển hàng hóa nặng — và tấm nền ấy đang đè lên một thân hình khổng lồ nằm bất động bên dưới.</p>
+    <p>Đó là con quái vật xanh lá đã phá hủy thang máy. Nó nằm sóng soài, một cánh tay to như thân cây gập vào trong một góc kỳ lạ, hơi thở khò khè nặng nhọc phả ra từng luồng hơi ấm. Yuki lùi lại theo bản năng, nhưng nó không hề động đậy — chỉ nằm đó, bị thương nặng, có lẽ bất tỉnh vì chính cú rơi đã khiến cabin thang máy đâm sầm vào nó.</p>
+    <p>Trên sàn cạnh tấm nền, chiếc điều khiển drone của cô nằm vỡ toác một góc, cùng với một tấm thẻ từ chưa rõ màu gì trong bóng tối. Yuki nhặt cả hai lên, nhét vào túi áo, rồi men theo một hành lang duy nhất còn ánh sáng, dẫn vào một khu vực trung tâm rộng lớn hơn hẳn mọi nơi cô từng đi qua — như thể toàn bộ Playroom, Sảnh Chính, và con đường ván gỗ chỉ là phần nổi rất nhỏ của một cơ sở khổng lồ nằm sâu dưới lòng đất.</p>
+    <p>Đứa con vẫn ở đâu đó trong mê cung này. Yuki hít một hơi thật sâu, và bước tiếp.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-8">
+    <div class="chapter-eyebrow">Chương 08</div>
+    <h2>Giọng Nói Qua Loa</h2>
+    <p>Khu vực tiếp theo được đề tên "Communications" trên một tấm biển kim loại còn sáng bóng. Hàng dãy màn hình camera xếp thành hàng trên tường, phần lớn vẫn sáng đèn, chỉ vài chiếc hiển thị nhiễu sóng trắng xóa.</p>
+    <p>Đột nhiên, một trong những chiếc loa treo trên trần rít lên một tiếng động, rồi một giọng nói vang lên — run rẩy, đứt quãng, tự xưng là nhân viên bảo vệ của cơ sở, đang bị kẹt trong phòng an ninh phía trước.</p>
+    <p>Giọng nói yêu cầu Yuki vẫy tay trước một chiếc camera gắn góc trần để xác nhận có nghe thấy. Cô ngập ngừng, rồi giơ tay lên. Ngay lập tức, giọng nói ấy thở phào, nói rằng cánh cửa phòng an ninh cần một tấm thẻ từ màu xanh nhạt mới mở được, và hứa sẽ giúp cô tìm con nếu được giải cứu ra ngoài.</p>
+    <p>Theo từng chỉ dẫn phát ra qua loa, Yuki dò dẫm qua các bảng điều khiển, đấu nối lại vài sợi dây bị đứt, cho đến khi một cánh cửa bên hông bật mở, để lộ tấm thẻ từ xanh nhạt nằm gọn trong một hộp kính nhỏ. Cô nhặt lấy, bước qua cánh cửa dẫn vào khu vực kế tiếp — nơi tấm biển ghi "Maintenance Room".</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-9">
+    <div class="chapter-eyebrow">Chương 09</div>
+    <h2>Con Nhện Trong Bóng Tối</h2>
+    <p>Maintenance Room tối hơn hẳn những nơi Yuki từng đi qua — chỉ có vài tia sáng lọt qua khe thông gió trên trần, đủ để cô nhận ra những đường ống dẫn nước chằng chịt và các thùng linh kiện xếp cao ngất.</p>
+    <p>Một tiếng động khô khốc, như móng vuốt cào trên kim loại, vang lên từ phía trên đầu. Yuki ngước nhìn lên đúng lúc một hình dáng dài ngoằng, nhiều chân, với ba con mắt xanh lét, bất ngờ rơi phịch xuống cách cô chỉ vài bước chân.</p>
+    <p>Cô không kịp hét lên. Bản năng đẩy cô lao người sang một bên, núp sau một thùng linh kiện đúng lúc con vật lao tới nơi cô vừa đứng, móng vuốt cào rách một mảng sàn kim loại.</p>
+    <p>Trên tường quanh đó, những dòng chữ nguệch ngoạc — có lẽ do một nhân viên nào đó viết lại trong hoảng loạn — cảnh báo rằng con nhện này không phải là ảo giác, nó có thật, và đừng bao giờ đứng yên quá ba giây trong tầm mắt nó. Yuki nuốt khan, rồi bắt đầu di chuyển không ngừng, lách qua từng dãy kệ, bấm những công tắc cũ để mở dần các lối đi, trong khi con nhện cứ lượn lờ phía trên, chờ một khoảnh khắc sơ hở.</p>
+    <p>Cuối cùng, sau một hồi len lỏi nghẹt thở, Yuki chộp được tấm thẻ từ mình cần và lao ra khỏi Maintenance Room, đóng sầm cánh cửa sau lưng đúng lúc một cú va đập nặng nề dội vào mặt trong của nó.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-10">
+    <div class="chapter-eyebrow">Chương 10</div>
+    <h2>Không Có Ai Ở Đó</h2>
+    <p>Yuki quay lại phòng an ninh mà giọng nói qua loa đã chỉ dẫn, áp tấm thẻ xanh nhạt vào ô cảm biến. Cánh cửa trượt mở với một tiếng rít nhẹ.</p>
+    <p>Căn phòng bên trong trống không. Không một bóng người, không một nhân viên bảo vệ nào bị mắc kẹt như giọng nói đã kể. Chỉ có một chiếc bàn làm việc gọn gàng, và trên đó là một tờ giấy viết tay để lại, nét chữ nguệch ngoạc và gấp gáp.</p>
+    <p>Yuki bước tới, cúi xuống đọc. Nhưng cô chưa kịp đọc hết dòng đầu tiên thì một tiếng bước chân nặng nề vang lên ngay sau lưng.</p>
+    <p>Cô quay phắt lại. Sinh vật hình người màu đỏ với hai chiếc sừng nhỏ trên đầu — chính là hình ảnh cô từng thấy trên những tấm poster ở Sảnh Chính — đang đứng sừng sững ngay cửa, chặn mất lối ra duy nhất.</p>
+    <p>Nó không nói một lời. Trước khi Yuki kịp phản ứng, một cú đánh mạnh giáng thẳng vào cô, và mọi thứ chìm vào bóng tối.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-11">
+    <div class="chapter-eyebrow">Chương 11</div>
+    <h2>Khu Y Tế</h2>
+    <p>Yuki tỉnh lại trên một chiếc giường bệnh còn khá mới, cổ tay và mắt cá chân bị buộc lỏng lẻo bằng dây vải — đủ để cô tự tháo ra sau vài phút vật lộn. Căn phòng quanh cô đầy những dụng cụ y tế sạch bóng, và trên các bức tường là hàng loạt hồ sơ bệnh án được đánh số kỳ lạ, dán chi chít khắp nơi.</p>
+    <p>Cô lướt mắt qua vài tờ gần nhất trong lúc tìm đường ra. Chúng nhắc đến một thứ chất lỏng dùng để "làm sống" những con thú nhồi bông của trường — và tỷ lệ thành công cực kỳ thấp. Nhiều dòng ghi chú khác, nét chữ run rẩy của các nhân viên cũ, nhắc đi nhắc lại một cái tên: Abyss — một vực thẳm nằm sâu hơn cả nơi cô đang đứng, nơi có "những thứ" không ai dám gọi tên.</p>
+    <p>Yuki cố không nghĩ về việc con mình có thể đang ở gần thứ được gọi là Abyss ấy. Cô lần ra một hành lang phụ, băng qua khu vực chứa đầy những bể kính rỗng, và cuối cùng tìm được một tấm thẻ từ khác — màu hồng nhạt — nằm trong một tủ thuốc bị bỏ quên.</p>
+    <p>Cô rời khỏi khu y tế trong im lặng, tay nắm chặt tấm thẻ, cố không để những gì vừa đọc được ăn mòn quyết tâm của mình.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-12">
+    <div class="chapter-eyebrow">Chương 12</div>
+    <h2>Lớp Học</h2>
+    <p>Cánh cửa tiếp theo dẫn vào một căn phòng được bài trí y hệt lớp mẫu giáo của đứa con — bàn ghế nhỏ xíu, bảng đen, cả một góc đọc sách với gối tựa sặc sỡ. Nhưng vừa bước chân vào, một bàn tay trắng muốt đã nắm lấy vai Yuki, kéo cô ngồi thụp xuống một chiếc ghế nhỏ đến mức đầu gối cô chạm cả vào cằm.</p>
+    <p>Banbaleena đứng trước mặt cô, mỉm cười dịu dàng đến rợn người, tay cầm một cây thước kẻ gõ nhịp lên bàn. Cô ta tuyên bố Yuki là "học sinh mới", và giờ học sẽ bắt đầu ngay lập tức — không được nói khi chưa được gọi, không được thở mạnh, không được rời khỏi chỗ ngồi.</p>
+    <p>Yuki buộc phải trải qua hết bài kiểm tra này đến bài kiểm tra khác — những phép toán vô nghĩa, những câu hỏi về "quy tắc trường học" trớ trêu đến mức phi lý — trong khi ánh mắt Banbaleena không rời khỏi cô lấy một giây, sẵn sàng sầm sập nổi giận nếu Yuki chậm trả lời.</p>
+    <p>May mắn thay, một tiếng động lạ vang lên đâu đó ngoài hành lang khiến Banbaleena phải đứng dậy đi kiểm tra, dặn với lại rằng "học sinh ngoan sẽ ngồi yên chờ cô quay lại." Ngay khi bóng dáng trắng toát ấy khuất sau cánh cửa, Yuki lập tức đứng bật dậy, lách qua một lối cửa phụ phía sau lớp học và chạy trốn trong im lặng.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-13">
+    <div class="chapter-eyebrow">Chương 13</div>
+    <h2>Bức Thư Từ Con</h2>
+    <p>Sau lớp học là một căn phòng nhỏ ấm áp hơn hẳn, với sáu quả trứng lớn màu hồng nhạt nằm gọn trong những chiếc ổ rơm. Yuki nhận ra ngay — đây là con của Opila Bird, con quái vật cô đã đẩy xuống vực ở Playroom.</p>
+    <p>Cô nhẹ nhàng đặt từng quả trứng vào một chiếc tổ lớn hơn ở góc phòng. Ngay khi quả cuối cùng được đặt xuống, một tiếng vỗ cánh khổng lồ vang lên — Opila Bird mẹ xuất hiện ở khung cửa, nhưng thay vì lao vào tấn công, nó chỉ cúi xuống, dồn hết sự chú ý vào đàn con vừa được đoàn tụ. Yuki nín thở, rồi lặng lẽ len qua khe hở bên cạnh nó mà thoát ra ngoài.</p>
+    <p>Ở hành lang tiếp theo, giữa đống giấy tờ và đồ chơi vương vãi, một mẩu giấy nhỏ với nét chữ nguệch ngoạc, non nớt của trẻ con khiến tim Yuki thắt lại. Cô cúi xuống nhặt lên.</p>
+    <p>Đó là chữ viết của đứa con. Con viết rằng con vẫn ổn, rằng một người bạn tên Claire cũng ổn, và một "con sứa tốt bụng" đã cứu cả hai khỏi một con chim to lớn và một kẻ màu đỏ dữ tợn, đang dẫn chúng về một nơi an toàn.</p>
+    <p>Yuki ngồi sụp xuống sàn, áp mảnh giấy vào ngực, nước mắt lăn dài lần đầu tiên kể từ khi bước chân vào tòa nhà này. Con còn sống. Con vẫn còn sống, và có ai đó — dù kỳ lạ đến đâu — đang bảo vệ con. Cô gấp mảnh giấy cẩn thận, cất vào túi áo sát tim, rồi đứng dậy, bước tiếp với một sức mạnh mới.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-14">
+    <div class="chapter-eyebrow">Chương 14</div>
+    <h2>Bức Tường Đại Gia Đình</h2>
+    <p>Con đường phía trước dẫn vào một căn phòng rộng lớn, nơi cả một bức tường được phủ kín bởi bức tranh Mural mà Yuki từng lướt qua ở Sảnh Chính — nhưng lần này, có thêm vài gương mặt mascot khác chen vào hai đầu bức tranh, nét vẽ hơi vội vàng hơn, như thể được bổ sung sau này. Những nhân vật gốc ở giữa — hàng ngũ cô từng thấy ngay từ Sảnh Chính — vẫn là những hình vẽ được chăm chút tỉ mỉ và hoàn thiện nhất trong cả bức tranh.</p>
+    <p>Bên dưới bức tranh, một bảng điều khiển nhỏ sáng đèn ổn định, yêu cầu nhập một dãy số. Cạnh đó là một tấm biển hướng dẫn: đếm tổng số mắt của tất cả các nhân vật trên tường, cộng thêm số ngón tay, rồi trừ đi số chiếc mũ.</p>
+    <p>Yuki đứng lùi lại, nheo mắt nhìn từng nhân vật một — con quái vật xanh lá cơ bắp, sinh vật đỏ có sừng, cô giáo trắng dịu dàng đến giả tạo, con chim hồng hạc, con sứa cam nhiều tay, và sinh vật nhỏ nhắn màu tím cuối tường. Cô đếm đi đếm lại ba lần cho chắc, rồi nhập dãy số vào bảng điều khiển run run.</p>
+    <p>Một tiếng "tách" vang lên. Cánh cửa phía cuối phòng bật mở, để lộ một hành lang dẫn về phía một sảnh lớn hơn — nơi có vẻ như đang chờ đợi rất nhiều thứ.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-15">
+    <div class="chapter-eyebrow">Chương 15</div>
+    <h2>Phòng Tập Hợp</h2>
+    <p>Ngay khi Yuki bước qua ngưỡng cửa, một hồi còi chói tai vang lên khắp cơ sở — ba chữ cái đỏ rực hiện lên trên một màn hình lớn: ASSEMBLY. Mọi cánh cửa quanh cô đồng loạt khóa lại với tiếng "cạch" khô khốc, trong khi những lối đi bí mật khác lại mở ra từ những góc tường tưởng như đặc kín.</p>
+    <p>Chính giữa căn phòng, trên một chiếc bàn tròn phủ khăn trải bàn sặc sỡ, là một chiếc bánh sinh nhật khổng lồ — nến chưa từng được thắp, lớp kem đã cứng lại theo thời gian. Trên đỉnh bánh, một cặp tượng điêu khắc nho nhỏ đứng xoay tròn chầm chậm: một hình Banban, một hình Banbaleena, hai tay nắm lấy nhau trong tư thế khiêu vũ, phát ra một điệu nhạc hộp nhạc leng keng đều đặn, vui tươi đến mức lạc lõng giữa bầu không khí căng thẳng của căn phòng.</p>
+    <p>Ở một góc của Phòng Tập Hợp — vốn là một căn phòng khá rộng — chừng một phần năm diện tích bị ngăn riêng ra bởi một vách kính lớn, tạo thành một khoang kín tách biệt hẳn với phần còn lại. Yuki đứng lại gần đó, không rõ nên chờ điều gì, tim vẫn đập thình thịch trong khoảng lặng kéo dài.</p>
+    <p>Một lúc sau, một tiếng cơ khí rền vang cất lên từ bên dưới sàn, ngay phía sau vách kính ấy. Một tấm nền nâng công nhân từ từ trồi lên qua khe hở giữa sàn nhà, chở theo sinh vật đỏ có sừng — kẻ đã đánh ngất cô — đứng vững trên đó, dần hiện ra trước mắt Yuki cho đến khi ngang tầm mắt cô qua lớp kính.</p>
+    <p>Nó không tấn công. Thay vào đó, nó cúi đầu, và bằng một giọng trầm khàn, tự giới thiệu mình tên là Banban.</p>
+    <p><em>"Tôi nợ cô một lời xin lỗi vì chuyện lúc nãy,"</em> nó nói, giọng chậm rãi qua lớp kính. <em>"Cú đấm đó không phải thù ghét gì cá nhân đâu... tôi chỉ cần chiếc drone và thẻ truy cập của cô thôi."</em></p>
+    <p>Yuki siết chặt tay, không nói gì, chỉ chờ nó nói tiếp. Banban ngập ngừng một lúc, rồi tiếp tục, giọng nó trầm xuống hẳn.</p>
+    <p><em>"Những đứa trẻ con người... chúng đang ở dưới đó, trong Vực Thẳm,"</em> nó nói. <em>"Tôi đang cố tiếp cận chúng trước khi quá muộn, nhưng chất Givanium... nó đang biến đổi chúng tôi. Nó khiến chúng tôi mất kiểm soát."</em></p>
+    <p>Nó thừa nhận biết rõ Yuki đang tìm con, và nói rằng bản thân nó cũng đang cố cứu những đứa trẻ.</p>
+    <p>Yuki nhìn xuống hai bàn tay to lớn, có phần biến dạng của Banban qua lớp kính, và tự hỏi liệu chính nó — vào một khoảnh khắc nào đó — có phải cũng từng "mất kiểm soát" như lời nó vừa nói. Nhưng đây không phải lúc để hỏi thêm.</p>
+    <p>Banban tiết lộ: có một kẻ khác, mạnh hơn nó rất nhiều, đang giữ những đứa trẻ mất tích ở sâu tít dưới một nơi gọi là Abyss. Nó chỉ tay về phía một hành lang mang biểu tượng con chim hồng hạc, bảo Yuki đi theo lối đó để đến một thang máy khác, hẹn sẽ gặp lại nhau ngay tại khoang kính này, chỉ là ở một tầng sâu hơn. Nói xong, tấm nền nâng công nhân bắt đầu hạ dần trở xuống khe sàn, mang nó lún sâu khỏi tầm mắt cô qua lớp kính, cho đến khi khuất hẳn.</p>
+    <p>Yuki không kịp hỏi thêm điều gì. Nó đã đi mất, để lại cô đứng một mình giữa Phòng Tập Hợp vừa mới im ắng trở lại — chỉ còn tiếng leng keng đều đặn của chiếc hộp nhạc trên bánh sinh nhật phía sau lưng cô, hai tượng nhỏ vẫn xoay vòng khiêu vũ như chưa từng biết đến điều gì vừa xảy ra.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-16">
+    <div class="chapter-eyebrow">Chương 16</div>
+    <h2>"Ngươi Luôn Là Học Sinh Hư"</h2>
+    <p>Yuki vừa quay lưng bước được vài bước thì một tiếng động dữ dội vang lên phía sau — cánh cửa lớp học cũ bị đạp tung khỏi bản lề, mảnh gỗ vỡ vụn văng tứ tung trên sàn. Banbaleena đứng sừng sững giữa khung cửa, thân hình trắng toát run lên vì giận dữ, đôi tai linh vật dựng đứng, đôi mắt vốn dịu dàng giờ trợn lên đầy ác ý.</p>
+    <p><em>"Ngươi luôn là học sinh hư!"</em> — cô rít lên, giọng nói méo đi giữa tiếng cười gằn và tiếng gầm gừ trộn lẫn — <em>"Bỏ lớp giữa giờ! Không xin phép! Ta sẽ dạy cho ngươi một bài học mà ngươi không bao giờ quên!"</em></p>
+    <p>Cô ta lao tới với tốc độ không tưởng so với vóc dáng mảnh khảnh của mình, hai tay vươn dài ra như móng vuốt. Yuki chỉ kịp né sang một bên trước khi bàn tay ấy đập vỡ tan một chiếc bàn học kim loại ngay sát chỗ cô vừa đứng.</p>
+    <p>Không còn đường lùi, Yuki lao vào một dãy hành lang hẹp, ngoằn ngoèo như ruột già của cả cơ sở. Chỉ vài bước sau ngưỡng cửa, hành lang đã chẻ làm hai ngách. Không có thời gian suy nghĩ, Yuki chọn đại một bên và lao vào.</p>
+    <p>Ngách đó dẫn đến một khoảng trống nhỏ, sàn nhà lát toàn những tấm cửa sập vuông vức xếp liền nhau, mỗi tấm đều có khóa cài han rỉ ở mép. Bản năng mách bảo cô bước thật nhẹ, thật nhanh, không dừng lại quá lâu ở bất kỳ tấm nào. Phía sau, Banbaleena vẫn gầm gừ đuổi theo, giọng cô vang vọng khắp những bức tường hẹp: <em>"Học sinh không được chạy trong hành lang! Học sinh không được la hét! Học sinh không được... KHÔNG VÂNG LỜI!"</em></p>
+    <p>Con đường tiếp tục chẻ nhánh hết lần này đến lần khác — có đoạn chỉ hai ngách, có đoạn tới ba. Hầu hết các lối rẽ, ngoại trừ một, đều dẫn qua những khoảng sàn cửa sập tương tự, và Yuki dần nhận ra một điều rợn người: một vài tấm cửa sập hoàn toàn vô hại, nhưng số khác lại là bẫy chết người, khóa chặt phía trên nhưng sẵn sàng bung tung bất cứ lúc nào cô đến quá gần — như thể có thứ gì đó đang chờ sẵn ngay bên dưới, chỉ chực đợi cô bước hụt chân.</p>
+    <p>Không còn thời gian để chọn lựa cẩn thận, Yuki đánh liều lao qua từng ngách một, đôi lúc chỉ cách một tấm cửa sập rung lên bần bật trong gang tấc, tiếng Banbaleena vẫn không ngừng vọng lại phía sau, giờ đã chuyển thành một điệp khúc lặp đi lặp lại đầy ám ảnh: <em>"Bad student. Bad student. BAD STUDENT!"</em></p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-17">
+    <div class="chapter-eyebrow">Chương 17</div>
+    <h2>Bàn Tay Của Jumbo Josh</h2>
+    <p>Ở một ngã rẽ khác, một tấm cửa sập ngay dưới chân Yuki bất chợt bật rung dữ dội đúng lúc cô vừa đặt chân lên. Cô nhảy vọt sang bên trong gang tấc, tim đập thót lên tận cổ, trong khi tấm cửa sập ấy vẫn rung bần bật như có một sức mạnh khổng lồ đang cố phá tung nó từ bên dưới.</p>
+    <p>Banbaleena đã bắt kịp, không còn phải chọn ngách nào — cô ta chỉ đơn giản húc thẳng qua mọi khúc rẽ, sải những bước dài bất thường, khoảng cách giữa hai người rút ngắn lại từng giây. Yuki nghe rõ tiếng móng tay cô ta cào rít trên nền bê tông, tiếng thở gấp gáp trộn với những câu quát tháo đứt quãng: <em>"Ngươi nghĩ có thể trốn khỏi lớp học của ta sao? Không ai được phép bỏ học giữa chừng! KHÔNG — AI — CẢ!"</em></p>
+    <p>Ngay khoảnh khắc bàn tay Banbaleena vươn tới, chỉ còn cách vai Yuki vài phân, một tiếng nổ chát chúa vang lên ngay phía trên đầu hai người — trần nhà bung toác thành từng mảnh, và một cánh tay khổng lồ màu xanh lá, thô ráp, đầy vết sẹo cũ, thò thẳng xuống từ khoảng tối phía trên.</p>
+    <p>Đó là con quái vật xanh lá cô từng thấy nằm bất tỉnh dưới tấm nền nâng công nhân. Không một lời cảnh báo, những ngón tay to như thân cây siết chặt quanh thân hình mảnh khảnh của Banbaleena, nhấc bổng cô ta thẳng lên trên, xuyên qua lỗ hổng vừa phá ra trên trần. Tiếng thét thất thanh của Banbaleena vọng lại, xa dần, xa dần, cho đến khi bị nuốt chửng vào khoảng tối phía trên và tắt hẳn.</p>
+    <p>Yuki đứng sững giữa hành lang đột ngột im ắng, bụi vữa trần vẫn còn lả tả rơi quanh chân. Ngay cạnh đó, một vật gì đó nhỏ và sáng bóng rơi xuống từ khoảng hổng trên trần, lăn lộc cộc trên sàn rồi dừng lại sát chân cô — một tấm thẻ từ, hẳn đã văng ra khỏi người Banbaleena trong lúc bị kéo lên.</p>
+    <p>Yuki cúi nhặt tấm thẻ, tay vẫn còn run. Cô lần theo hành lang còn lại, cuối cùng tìm thấy một cánh cửa duy nhất không có bẫy sập nào xung quanh — trên cửa in hình con chim hồng hạc quen thuộc. Cô áp thẻ vào ô cảm biến; cửa mở ra, để lộ một tấm nền nâng công nhân khác đang chờ sẵn.</p>
+    <p>Yuki bước lên, nhấn nút điều khiển. Tấm nền bắt đầu hạ xuống, chìm dần vào bóng tối sâu hơn của cơ sở. Cô áp tay lên túi áo, nơi mảnh giấy của đứa con vẫn nằm yên sát tim, và thì thầm với chính mình rằng cô đang đến gần con hơn bao giờ hết.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-18">
+    <div class="chapter-eyebrow">Chương 18</div>
+    <h2>Giọng Nói Qua Màn Hình</h2>
+    <p>Tấm nền nâng công nhân chạm đáy với một cú xóc nhẹ. Yuki bước xuống một tầng thấp hơn hẳn, không khí lạnh và ẩm hơn, như thể cô vừa vượt qua một ranh giới nào đó mà cơ sở này cố tình dựng lên.</p>
+    <p>Một chiếc màn hình gắn trên tường bật sáng, nhiễu sóng vài giây trước khi hiện rõ hình ảnh Banban — không đứng trước mặt cô lần này, mà qua một hệ thống camera giám sát nào đó. Giọng nó vang lên qua loa, có phần nghẹn lại.</p>
+    <p><em>"Tôi không thể đến gặp cô trực tiếp ở đây,"</em> nó nói. <em>"Bản năng bạo lực trong tôi... nó dễ trỗi dậy hơn khi xuống sâu. Tôi tự nhốt mình trong phòng giám sát, để có thể giúp cô mà không gây nguy hiểm cho cô."</em></p>
+    <p>Nó hướng dẫn Yuki đến một khu vực gọi là Aquatic Sector, nói rằng ở đó có một sinh vật tên Stinger Flynn — con sứa khổng lồ duy nhất biết chính xác vị trí của những đứa trẻ. Màn hình tắt phụt ngay sau đó, để lại Yuki một mình trong hành lang tối, chỉ còn tiếng nước nhỏ giọt đều đặn đâu đó phía xa.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-19">
+    <div class="chapter-eyebrow">Chương 19</div>
+    <h2>Pin Cho Drone & Cáp Treo</h2>
+    <p>Chiếc điều khiển drone trong túi Yuki phát ra một tiếng bíp yếu ớt rồi tắt hẳn — hết pin. Cô lục soát các tủ đồ dọc hành lang, cuối cùng tìm được một viên pin dự phòng trong một hộp sơ cứu bị bỏ quên, lắp vào đúng khe cắm.</p>
+    <p>Với drone hoạt động trở lại, cô giải quyết một loạt câu đố cơ khí để lấy được tấm thẻ từ cần thiết, rồi tìm đường đến một trạm cáp treo cũ kỹ nhìn xuống một vực nước tối om phía dưới. Cô khởi động cỗ máy, bước vào cabin nhỏ, và để nó kéo mình vượt qua khoảng không rộng lớn, tiến sâu hơn vào khu vực mang tên Aquatic Sector.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-20">
+    <div class="chapter-eyebrow">Chương 20</div>
+    <h2>Con Sứa Trong Bóng Tối</h2>
+    <p>Aquatic Sector mở ra trước mắt Yuki như một thủy cung bỏ hoang — những bể kính khổng lồ, phần lớn đã cạn nước, ánh sáng xanh lam nhạt hắt lên từ đáy bể còn sót lại chút ít.</p>
+    <p>Giữa khu vực, một chiếc kiosk liên lạc cũ đứng lặng lẽ. Yuki ấn vào nút gọi duy nhất còn sáng đèn. Một hồi chuông trầm vang lên, dội qua những bể kính trống rỗng, và từ trong bóng tối của bể lớn nhất, một khối hình khổng lồ khẽ cựa mình — một con sứa với vô số xúc tu, to lớn đến mức choán gần hết bể, một con mắt duy nhất từ từ mở ra, nhìn thẳng về phía cô.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-21">
+    <div class="chapter-eyebrow">Chương 21</div>
+    <h2>Giấc Mơ Bãi Biển</h2>
+    <p>Ngay khi ánh mắt ấy chạm vào cô, thế giới quanh Yuki bỗng nhòe đi như nước tan trong nước. Khi mọi thứ rõ nét trở lại, cô không còn đứng giữa Aquatic Sector nữa — mà là trên một bãi biển trải dài, nắng vàng óng, sóng vỗ rì rào, yên bình đến mức phi lý.</p>
+    <p>Một hình dáng nhỏ hơn nhiều so với con sứa khổng lồ lúc nãy ngồi xếp bằng trên cát gần đó, tự xưng là Stinger Flynn. Nó nói về việc bị buộc phải làm những điều trái với bản chất mình trong bóng tối của cơ sở, về việc chưa từng được ánh nắng thật sự chạm vào da suốt một đời bị nhốt dưới lòng đất.</p>
+    <p><em>"Tôi chỉ muốn một cuộc sống đơn giản,"</em> nó nói, giọng nhẹ như gió biển. <em>"Ăn tôm. Tránh xa mọi thứ ở nơi đó. Để làm được điều đó, tôi cần bọn trẻ."</em> Nó hứa sẽ giữ ít nhất một người lớn còn sống và tỉnh táo để đưa các em lên mặt đất, rồi quay sang khuyên Yuki nên bỏ cuộc — quên hết mọi chuyện về nơi này, rời đi trong khi vẫn còn có thể, rằng ngày mai sẽ tốt hơn nếu cô làm vậy.</p>
+    <p>Yuki không đáp lời. Cô chỉ đứng đó, nhìn sóng biển ảo giác vỗ vào bờ cát không có thật, và biết chắc một điều duy nhất: cô sẽ không bao giờ rời đi mà không có con.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-22">
+    <div class="chapter-eyebrow">Chương 22</div>
+    <h2>Ký Ức Của Con Sứa</h2>
+    <p>Giấc mơ không tan ngay. Thay vào đó, Yuki cảm thấy mình như bị kéo tuột vào một góc nhìn khác — không còn là chính mình nữa, mà như đang nhìn qua vô số con mắt nhỏ của Stinger Flynn, trôi nổi trong một khoảng ký ức xa xưa của nó.</p>
+    <p>Cô — hay đúng hơn là phần ý thức đang mượn hình hài Stinger — thấy mình lướt qua một trường bắn cũ, những mục tiêu hình tròn phát sáng xuất hiện lần lượt. Một bản năng không phải của riêng cô mách bảo cách phóng ra những tia điện xanh biếc từ đầu các xúc tu, bắn trúng từng mục tiêu một cho đến khi tất cả vụt tắt.</p>
+    <p>Ngay khi mục tiêu cuối cùng nổ tung thành ánh sáng, ký ức vỡ vụn, và Yuki bừng tỉnh, trở lại làm chính mình, đứng giữa Aquatic Sector thật sự, tim đập loạn nhịp vì vừa trải qua một điều gì đó không thuộc về mình.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-23">
+    <div class="chapter-eyebrow">Chương 23</div>
+    <h2>Khu Vực Của Sheriff Toadster</h2>
+    <p>Con đường tiếp theo dẫn Yuki vào một khu vực được trang trí như một nhà tù đồ chơi — song sắt sơn màu pastel, biển hiệu vẽ hình một chú ếch đội mũ cảnh sát cùng dòng chữ chào đón vui nhộn đến kỳ quặc.</p>
+    <p>Trên tường dán một tấm hướng dẫn: "bắt đủ 10 tên tội phạm" để mở cửa tiếp. Khi Yuki nhìn quanh, cô nhận ra "tội phạm" chỉ là những chiếc xô nhựa màu hồng có gắn hai con mắt đồ chơi, nằm rải rác khắp phòng. Cô nhặt từng chiếc, bỏ vào một khung nhà giam thu nhỏ đặt giữa phòng, cho đến khi đủ mười chiếc. Một công tắc ẩn dưới gầm bàn bật lên, cánh cửa phía trước mở ra.</p>
+    <p>Trên bàn làm việc gần đó, vài cuộn băng cũ và ghi chú nhắc đến việc tiêm một loại chất tên Givanium cùng vật liệu di truyền của con người vào một con cóc, với hy vọng tạo ra một phiên bản sống của viên cảnh sát ếch trên biển hiệu. Yuki rùng mình, không nán lại đọc thêm, và bước tiếp.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-24">
+    <div class="chapter-eyebrow">Chương 24</div>
+    <h2>Phẫu Thuật Nabnaleena</h2>
+    <p>Ở căn phòng kế tiếp, giọng Banban lại vang lên qua loa — nhưng lần này trầm và chậm rãi khác thường, như đang cố bắt chước giọng điệu của một vị bác sĩ nào đó. Nó kể rằng các nhà nghiên cứu từng tin con nhện Yuki đã chạm trán trước đó — Nabnab — trở nên hung dữ vì cô đơn, nên đã tạo ra một sinh vật khác để làm bạn đời cho nó. Ca phẫu thuật ấy bị bỏ dở giữa chừng từ rất lâu; phần khó nhất đã hoàn thành, chỉ còn thiếu bước cuối.</p>
+    <p>Trước mặt Yuki, trên một bàn phẫu thuật, một sinh vật nhện màu tím bất động nằm đó, chưa hoàn thiện. Theo hướng dẫn hiện trên một màn hình nhỏ, cô pha trộn từng lọ chất lỏng phát sáng theo đúng thứ tự màu và nồng độ được yêu cầu, rồi tiêm hỗn hợp ấy vào sinh vật trên bàn.</p>
+    <p>Nó giật mình, đôi mắt bật mở. Nabnaleena đã tỉnh.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-25">
+    <div class="chapter-eyebrow">Chương 25</div>
+    <h2>Sự Xuất Hiện Của Jumbo Josh</h2>
+    <p>Trên bàn cạnh đó, Yuki tìm thấy một cuộn băng cassette ghi tay dòng chữ "Spider Assembly". Cô mang nó trở lại Aquatic Sector, tìm một chiếc loa cũ gắn ở khu vực nghỉ, và cho cuộn băng chạy. Một hồi chuông triệu tập vang khắp khu vực.</p>
+    <p>Không lâu sau, Nabnab xuất hiện, đôi mắt trố nhìn chằm chằm vào Nabnaleena đang đứng cạnh Yuki. Cả hai tiến lại gần nhau, gần như rụt rè. Giọng Banban qua loa buông một câu nhận xét lạnh lùng, đại ý rằng lẽ ra hai sinh vật ấy phải trở thành một thứ gì đó "đột biến" hơn nữa.</p>
+    <p>Ngay giữa khoảnh khắc ấy, mặt nước ở một bể lớn gần đó vỡ tung — con quái vật xanh lá khổng lồ lao vọt lên từ Abyss, đánh bất tỉnh Nabnab chỉ trong một cú vươn tay, rồi kéo nó biến mất trở lại vào bóng tối bên dưới. Nabnaleena hét lên, chạy biến về phía căn phòng của Nabnab, cánh cửa đóng sầm phía sau nó. Yuki đứng chết lặng, tim đập thình thịch trước sức mạnh vừa chứng kiến.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-26">
+    <div class="chapter-eyebrow">Chương 26</div>
+    <h2>Giấc Mơ Sa Mạc</h2>
+    <p>Vì Yuki vẫn không chịu rời đi, thế giới quanh cô lại nhòe đi lần nữa. Lần này, cô tỉnh dậy ở băng ghế sau của một chiếc xe cũ đang lao vun vút qua một sa mạc trải dài bất tận.</p>
+    <p>Stinger Flynn cầm lái, Banban ngồi ghế trước, cùng với hình ảnh của con chim hồng hạc và một sinh vật nhỏ xanh tím ngồi chen chúc phía sau, trong khi bóng dáng Nabnab đuổi theo phía xa sau xe. Cả nhóm trò chuyện, đùa giỡn với nhau như những người bạn cũ đi chơi xa — Banban hỏi bao giờ đến "bãi biển", còn Stinger ngập ngừng thú nhận rằng nó đang bị lạc đường.</p>
+    <p>Khi Banban và con chim hồng hạc trêu chọc rằng đừng bao giờ tin lời một con sứa, Stinger nổi nóng, quay đầu lại quát to — và chiếc xe đâm sầm vào một cây xương rồng khổng lồ mọc giữa sa mạc. Thế giới ảo giác rung chuyển dữ dội quanh Yuki.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-27">
+    <div class="chapter-eyebrow">Chương 27</div>
+    <h2>Hành Lang Tia Sét</h2>
+    <p>Ngay sau cú va chạm, Yuki lại thấy mình mượn hình hài của Stinger Flynn lần nữa — lần này đứng trong một hành lang hẹp, bốn công tắc mang biểu tượng tia sét gắn dọc hai bên tường, một vài chiếc xoay tròn hoặc trượt qua trượt lại không ngừng.</p>
+    <p>Cô — hay Stinger, hay cả hai cùng lúc — phóng từng luồng điện xanh nhắm vào các công tắc, phải canh đúng nhịp với những cái đang di chuyển để không đánh trượt. Khi công tắc cuối cùng bật sáng, một cánh cửa phía cuối hành lang mở ra, và giấc mơ tan biến, trả Yuki về với thực tại.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-28">
+    <div class="chapter-eyebrow">Chương 28</div>
+    <h2>Tamataki & Chamataki</h2>
+    <p>Tỉnh dậy khỏi giấc mơ, Yuki thấy mình đang đứng trước một căn phòng lớn, nơi một sinh vật kỳ dị đang cuộn mình trong bóng tối — thân rồng, nhưng có tới hai chiếc đầu vươn cao, mỗi cái nhìn về một hướng khác nhau, gầm gừ khe khẽ.</p>
+    <p>Dòng chữ khắc trên tường hướng dẫn cô thu thập ba quả pháo hoa rải rác quanh phòng, rồi lần lượt đặt từng quả lên lưỡi của mỗi cái đầu. Con vật nuốt chửng không chút nghi ngờ — và phát nổ từ bên trong. Sau ba lần như vậy, cả sinh vật hai đầu rùng mình dữ dội rồi sụp đổ, rơi thẳng xuống vực Abyss sâu hun hút bên dưới sàn nứt.</p>
+    <p>Giữa đống đổ nát nơi nó vừa đứng, Yuki nhặt được một chiếc mũ tiệc nhỏ, sặc sỡ đến lạc lõng — như thể một món đồ chơi trẻ con bị lạc vào giữa cảnh tượng vừa rồi.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-29">
+    <div class="chapter-eyebrow">Chương 29</div>
+    <h2>Cuộc Đua Chim</h2>
+    <p>Chiếc mũ tiệc dẫn Yuki đến một hình nộm nhỏ đội mũ đầu bếp đứng giữa một khoảng sân rộng — và ngay khi cô đội chiếc mũ lên đầu hình nộm, một chú chim hồng hạc con lập tức chạy ùa ra khỏi vòng bảo vệ của hai con chim trưởng thành đứng gần đó, bị thứ gì đó trên chiếc mũ thu hút.</p>
+    <p>Yuki vội ôm lấy chim con. Ngay lập tức, một con chim khác — cao lớn, lông vũ sẫm màu hơn Opila Bird — nhảy bổ tới đầy giận dữ. Bản năng thúc đẩy Yuki nhảy phắt lên lưng nó thay vì bỏ chạy, bám chặt cho đến khi cơn giận dữ của nó dịu lại, như thể vừa được thuần hóa. Ngay sau đó, chính Opila Bird — con chim cô từng đẩy xuống vực ở Playroom rất lâu về trước — cũng đáp xuống gần đó. Yuki nhẹ nhàng đặt chim con trở lại tấm lưng quen thuộc của nó.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-30">
+    <div class="chapter-eyebrow">Chương 30</div>
+    <h2>Sự Thật Về Chiếc Tụy</h2>
+    <p>Ngay lúc đó, mặt nước phía dưới sàn nứt vỡ tung. Stinger Flynn trồi lên từ Abyss, một xúc tu khổng lồ đang quấn chặt quanh thân hình bất tỉnh của Banban.</p>
+    <p>Nó nhìn Yuki, giọng trầm hẳn xuống. <em>"Banban đã âm thầm giúp cô đi đến tận đây,"</em> nó nói. <em>"Nhưng suốt thời gian đó, đầu óc hắn chỉ nghĩ đến đúng một thứ duy nhất — tụy của cô."</em> Nó nói thêm rằng bản thân vừa lấy được từ Banban một thông tin quan trọng: cách để tránh biến thành thứ mà hắn đang dần trở thành.</p>
+    <p>Yuki lùi lại một bước, tim đập dồn dập. Trước khi cô kịp phản ứng gì hơn, Stinger buông tay.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-31">
+    <div class="chapter-eyebrow">Chương 31</div>
+    <h2>Hellish Banban</h2>
+    <p>Banban rơi xuống sàn, nhưng không hề bị thương. Ngay khi chạm đất, thân hình nó bắt đầu phồng lên, tối sẫm lại, hai chiếc sừng trên đầu vươn dài và cong vút, chiếc mũ cao vốn luôn đội trên đầu rơi lăn sang một bên. Gương mặt vốn có phần thân thiện giờ méo xệch thành một biểu cảm hung tợn thuần túy bản năng.</p>
+    <p>Nó gầm lên một tiếng dài, rồi lao thẳng về phía Yuki, Opila Bird, và con chim to lớn cô vừa thuần hóa.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-32">
+    <div class="chapter-eyebrow">Chương 32</div>
+    <h2>Những Cánh Cửa Màu</h2>
+    <p>Yuki bám chặt lấy lưng con chim to lớn, lao đi giữa một chuỗi phòng thí nghiệm nối tiếp nhau, Opila Bird sải cánh bay sát bên cạnh. Trước mỗi cánh cửa, một luồng sáng màu xanh ngọc hoặc hồng nhạt hắt lên — xanh ngọc nghĩa là con chim cô đang cưỡi phải xông qua trước, hồng nhạt là đến lượt Opila dẫn đường.</p>
+    <p>Yuki phải liên tục thúc giục hoặc ghìm nhịp con chim của mình cho đúng thứ tự; chỉ cần chậm một nhịp, cả hai con chim sẽ vướng vào nhau ngay giữa khung cửa, và tiếng gầm gừ của Hellish Banban phía sau lại gần thêm một chút.</p>
+    <p>Nó vừa đuổi vừa rít lên những lời đe dọa đứt quãng, đại ý rằng dù Yuki có chạy trốn đến đâu, thứ mùi hương từ cơ thể cô cũng sẽ luôn dẫn đường cho nó tìm đến. Yuki không đáp lại, chỉ siết chặt hơn, thúc con chim lao nhanh hơn qua cánh cửa cuối cùng — nơi cả nhóm đổ ập vào một khoảng không gian rộng và cao hơn hẳn, tạm thời an toàn.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-33">
+    <div class="chapter-eyebrow">Chương 33</div>
+    <h2>Trận Chiến Trên Cao</h2>
+    <p>Ngay khi Hellish Banban gần như bắt kịp ở ngưỡng cửa cuối cùng, một bóng hình quen thuộc lao tới chặn đường nó — con quái vật xanh lá khổng lồ Yuki từng thấy nằm bất tỉnh dưới tấm nền nâng công nhân rất lâu trước đó.</p>
+    <p>Hellish Banban, hoàn toàn mất lý trí, lao thẳng vào cắn xé điên cuồng. Nhưng con quái vật xanh lá áp đảo dễ dàng — hất tung nó ra, đập mạnh xuống sàn hết lần này đến lần khác, chuẩn bị tung một đòn cuối cùng.</p>
+    <p>Stinger Flynn, vẫn ở dạng khổng lồ, trồi lên can thiệp, gào lên bảo cả hai dừng lại. Nhưng con quái vật xanh lá không nghe — nó tóm lấy cả Stinger, dù kích thước rất lớn, ném mạnh xuống sàn và tiếp tục giáng đòn. Giữa cơn hỗn loạn, con chim to lớn Yuki đang cưỡi bị rung lắc dữ dội và trượt chân rơi xuống từ độ cao nơi cả nhóm đang đứng quan sát; Opila Bird lập tức lao theo để cứu nó, để lại chim con một mình bên cạnh Yuki.</p>
+    <p>Yuki đứng trên cao, ôm chặt lấy chim con đang run rẩy, bất lực nhìn toàn bộ trận chiến diễn ra bên dưới — Hellish Banban bị đánh cho trọng thương, gần như bất động; Stinger Flynn, dù to lớn hơn nhiều, cũng bị khuất phục chỉ trong vài đòn. Cô không thể can thiệp, chỉ có thể đứng đó, tim đập loạn nhịp, ghì chặt sinh vật bé nhỏ trong vòng tay như thể đó là thứ duy nhất còn giữ cô lại với thực tại.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-34">
+    <div class="chapter-eyebrow">Chương 34</div>
+    <h2>Đừng Để Gã Hề Tìm Thấy Bạn</h2>
+    <p>Khi tiếng gầm gừ bên dưới cuối cùng cũng lặng xuống, Yuki nhận ra không còn cách nào xuống đó — con đường phía trên nơi cô đứng đã tách biệt hẳn với khu vực chiến trường. Chỉ có một cánh cửa duy nhất mở ra gần đó, dẫn vào một tấm nền nâng công nhân khác.</p>
+    <p>Trên bức tường cạnh lối vào, ai đó đã viết vội bằng thứ gì trông như phấn màu, nét chữ run rẩy nhưng dứt khoát: <em>"Tìm vương quốc. Tìm Sheriff. Đừng để gã hề tìm thấy bạn."</em> Yuki đọc đi đọc lại dòng chữ ấy, không hiểu hết ý nghĩa, nhưng một cảm giác lạnh buốt lan dọc sống lưng cô.</p>
+    <p>Cô ôm chú chim con sát vào ngực — nó đã ngừng run, chỉ im lặng rúc vào người cô như tìm kiếm một chỗ dựa nào đó giữa mớ hỗn loạn vừa xảy ra. Yuki bước lên tấm nền nâng công nhân, một tay vẫn giữ chặt chim con, tay kia nhấn nút điều khiển.</p>
+    <p>Tấm nền bắt đầu hạ xuống, mang cả hai chìm dần vào những tầng đã bị bỏ hoang từ rất lâu, nơi ánh sáng cuối cùng từ Aquatic Sector cũng nhạt dần rồi tắt hẳn phía trên đầu.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-35">
+    <div class="chapter-eyebrow">Chương 35</div>
+    <h2>Hành Lang Cam</h2>
+    <p>Tấm nền nâng công nhân chạm đáy với một cú xóc nhẹ, mở ra một hành lang sơn màu cam bạc màu. Ngay lập tức, tiếng gầm đôi quen thuộc vang lên phía sau — hai chiếc đầu rồng, sinh vật Yuki tưởng đã đẩy xuống vực từ rất lâu, lao ra từ một khe nứt tối, đuổi sát gót.</p>
+    <p>Yuki ôm chặt chim con, chạy hết sức lực dọc hành lang đang hẹp dần. Ngay khi tưởng chừng bị dồn vào đường cùng, hai cái đầu rồng vướng phải nhau ở một đoạn cua gấp quá hẹp cho cả hai cùng lọt qua — chúng mắc kẹt, gầm gừ giận dữ trong khi Yuki kịp lách qua khe hở còn lại và chạy thoát.</p>
+    <p>Thở dốc, cô nhặt lên một chiếc điều khiển drone màu vàng ánh kim nằm chỏng chơ trên sàn, đẹp và mới hơn hẳn chiếc cũ đã vỡ. Nhưng ngay khi vừa cầm nó lên, một làn khí gas không màu bất ngờ tràn ngập hành lang từ những lỗ thông hơi ẩn trên tường. Đầu óc Yuki quay cuồng, chân khuỵu xuống, và bóng tối nuốt chửng cô trước khi cô kịp hiểu chuyện gì đang xảy ra.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-36">
+    <div class="chapter-eyebrow">Chương 36</div>
+    <h2>Phòng Thẩm Vấn</h2>
+    <p>Yuki tỉnh dậy trên một chiếc ghế kim loại, cổ tay không bị trói, nhưng đầu óc vẫn còn váng vất vì hơi gas. Đối diện cô, ngồi sau một chiếc bàn đơn sơ, là sinh vật ếch cao lớn khoác áo choàng cảnh sát trưởng — Sheriff Toadster.</p>
+    <p>Nó đặt ra sáu câu hỏi, mỗi câu chỉ cần gật hoặc lắc đầu — về những sinh vật cô đã từng chạm trán trong hành trình: con chim hồng hạc, con quái vật xanh lá, con sứa cam, con nhện xanh, sinh vật đỏ có sừng, và cô giáo trắng. Yuki trả lời từng câu một, không hiểu rõ mục đích của cuộc thẩm vấn kỳ lạ này, nhưng cảm nhận được ánh mắt Toadster dần dịu lại sau mỗi câu trả lời.</p>
+    <p>Khi câu hỏi cuối cùng kết thúc, nó đứng dậy, không giải thích gì thêm, chỉ ra hiệu bảo cô đi theo. Nó dẫn cô qua một cánh cổng lớn, phía sau là một không gian hoàn toàn khác — sáng sủa, trang hoàng lộng lẫy một cách kỳ quặc giữa lòng cơ sở tăm tối. Một tấm biển treo cao ghi: "Vương Quốc."</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-37">
+    <div class="chapter-eyebrow">Chương 37</div>
+    <h2>Nữ Hoàng Của Vương Quốc</h2>
+    <p>Giữa Vương Quốc, trên một chiếc ngai vàng chạm trổ cầu kỳ, một sinh vật khổng lồ mang dáng dấp chuột túi, toàn thân màu tím thẫm, ngồi đó với vẻ uy nghi lạ thường. Nó tự giới thiệu là Queen Bouncelia, người cai trị nơi này — còn Sheriff Toadster, nó nói, là người bảo vệ duy nhất của cả Vương Quốc.</p>
+    <p>Đôi mắt to của nữ hoàng nhìn xoáy vào Yuki một lúc lâu, rồi nó khẽ gật đầu, như thể đã nhìn thấu điều gì đó. Nó nói biết rõ Yuki đang đi tìm con, tuyên bố tha bổng cho cô khỏi mọi "tội trạng xâm nhập", và ban cho cô quyền công dân danh dự của Vương Quốc — một nghi thức nghe có phần lố bịch giữa hoàn cảnh này, nhưng Yuki không phản đối.</p>
+    <p>Đổi lại, nữ hoàng yêu cầu cô cùng Sheriff Toadster đi tìm ba bộ phận còn thiếu của một chiếc thang máy lớn — thứ duy nhất có thể đưa người lên các tầng cao hơn từ Vương Quốc bị cô lập này.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-38">
+    <div class="chapter-eyebrow">Chương 38</div>
+    <h2>Đường Ống Thông Gió</h2>
+    <p>Khu vực đầu tiên Toadster dẫn Yuki đến là Ventilation Sector — mê cung ống thông gió chằng chịt trên trần, quá cao và quá hẹp để một người lớn chui lọt. Toadster chỉ vào chiếc drone vàng trong tay cô, ra hiệu đây chính là lúc cần dùng đến nó.</p>
+    <p>Yuki thả drone bay vào miệng ống, điều khiển nó len lỏi qua từng khúc cua chật hẹp bên trong hệ thống thông gió, camera nhỏ gắn trên thân truyền hình ảnh về một màn hình cầm tay. Cô nhấn hàng loạt công tắc ẩn trong bóng tối của đường ống — có cái nằm sâu đến mức drone phải bay ngược, có cái đòi hỏi cô lượn qua một khúc cua gấp mà chỉ sai một nhịp là va phải thành ống. Sau cùng, một cánh cửa lớn bên dưới rung lên rồi mở toang, đủ chỗ cho cả Yuki và Toadster bước qua.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-39">
+    <div class="chapter-eyebrow">Chương 39</div>
+    <h2>Hồ Sơ Về Nữ Hoàng</h2>
+    <p>Trong một căn phòng tài liệu nhỏ ngay sau Ventilation Sector, những tập hồ sơ ố vàng chất đống trên kệ. Yuki không định dừng lại, nhưng một cái tên quen thuộc trên gáy một tập hồ sơ khiến cô khựng bước: "Case 14 — Nữ Hoàng."</p>
+    <p>Lướt qua vài trang, cô hiểu ra Queen Bouncelia được tạo nên từ DNA người, chuột túi, và Givanium — ban đầu ổn định, nhưng chiếc túi trước bụng của nó lại chứa đầy những sinh vật nguy hiểm mà hồ sơ chỉ gọi bằng cái tên "The Naughty Ones". Nếu nữ hoàng cười lớn hoặc bị kích động quá mức, chúng có thể thoát ra ngoài — đó là lý do nó bị đưa xuống tận đây để cách ly. Một dòng ghi chú khác nhắc đến việc cây quyền trượng của nó từng bị các nhà khoa học tịch thu để nghiên cứu riêng.</p>
+    <p>Yuki đặt tập hồ sơ xuống, nhìn về phía phòng ngai vàng xa xa, chợt thấy rùng mình khi nhớ lại nụ cười uy nghi của nữ hoàng lúc nãy.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-40">
+    <div class="chapter-eyebrow">Chương 40</div>
+    <h2>Hồ Sơ Về Cảnh Sát Trưởng</h2>
+    <p>Ở một góc khác của cùng căn phòng tài liệu, một tập hồ sơ khác mang tên "Case 9 — Cảnh Sát Trưởng" nằm lẫn trong đống giấy tờ đổ nát. Yuki nhặt lên, tò mò về người bạn đồng hành kỳ lạ đang đứng chờ cô ngoài cửa.</p>
+    <p>Hồ sơ giải thích rằng Sheriff Toadster được tạo từ DNA cóc, người, và Givanium, rồi bị buộc xem đi xem lại vô số bộ phim cao bồi để hình thành một nhân cách "thực thi luật pháp". Kết quả là nó trở nên bảo vệ các mascot khác đến cực đoan, coi mọi người từ bên ngoài là tội phạm tiềm tàng — và vì phương pháp bắt giữ quá bạo lực, nó cũng bị đày xuống tầng sâu này.</p>
+    <p>Yuki đặt tập hồ sơ xuống, nhìn sang Toadster đang đứng chờ ngoài cửa, và tự hỏi có bao nhiêu phần trong "công lý" của nó là thật, và bao nhiêu chỉ là thứ bị nhồi nhét vào từ những cuộn phim cũ.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-41">
+    <div class="chapter-eyebrow">Chương 41</div>
+    <h2>Món Quà Cho Kẻ Lạ Mặt</h2>
+    <p>Ở khu Ventilation, Yuki chạm trán Banban, đang loay hoay bên một thiết bị liên lạc, cố gọi cho một cái tên nào đó — Zolphius — để gửi tặng một hình nộm đầu bếp nhỏ mà nó gọi là món quà hòa giải.</p>
+    <p>Nhưng Nabnab bất ngờ lao ra từ bóng tối, giật lấy món quà khỏi tay Banban rồi chạy biến mất. Banban gầm lên một tiếng đầy phẫn nộ — và ngay trước mắt Yuki, thân hình nó bắt đầu phồng lên, tối sẫm lại, sừng vươn dài, gương mặt méo xệch thành dạng Hellish quen thuộc mà cô từng chứng kiến ở Phần 3.</p>
+    <p>Nó đuổi theo Nabnab với tốc độ kinh hoàng, dồn con nhện vào một góc tường, rồi giáng liên tiếp những cú đấm cho đến khi Nabnab bất tỉnh, ném mạnh thân hình nhỏ bé ấy văng vào tường với một tiếng va chạm khô khốc. Yuki đứng chết lặng nhìn cảnh tượng ấy, rồi Banban từ từ trở lại hình dạng bình thường, thở hổn hển, không nói một lời nào về những gì vừa xảy ra.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-42">
+    <div class="chapter-eyebrow">Chương 42</div>
+    <h2>Mê Cung Khu Nhà Ở</h2>
+    <p>Bộ phận thang máy thứ hai được cho là nằm đâu đó trong Housing Sector — dãy phòng ngủ tập thể trống trải, giường tầng xếp thành hàng dài như một khu nội trú bị bỏ hoang. Chìa khóa và tấm vé cần thiết lại nằm trên những kệ cao không với tới, hoặc kẹt sau các khe tường hẹp.</p>
+    <p>Yuki lại thả drone bay lên, dẫn nó lượn qua từng dãy giường, bấm đúng thứ tự các nút phát sáng gắn trên đầu giường để mở một cánh tủ khóa kín. Có đoạn drone phải luồn qua một khe tường chỉ vừa đủ rộng, một cú chạm nhẹ vào thành khe cũng đủ khiến nó bật tín hiệu báo động. Toadster đứng canh gác trong lúc cô tập trung điều khiển, thỉnh thoảng liếc mắt về phía cuối hành lang như đang cảnh giác điều gì đó.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-43">
+    <div class="chapter-eyebrow">Chương 43</div>
+    <h2>Danh Sách Chọn Lọc</h2>
+    <p>Trong một căn phòng nhỏ khuất sau dãy giường tầng cuối cùng, Yuki tìm thấy một lá thư viết tay, nét chữ vội vàng và có phần lén lút. Người viết nhắc đến một hệ thống liên lạc bí mật giữa hai đồng nghiệp, phàn nàn về việc phải để lại tin nhắn ở tầng này vì cảm giác luôn bị theo dõi. Người ấy viết rằng đã thu thập dữ liệu của tất cả các em nhỏ đang theo học tại trường mẫu giáo, đánh dấu những "ứng viên hiến gen" mà mình ưng ý, và đề nghị người nhận thư làm điều tương tự trước khi hai người cùng thu hẹp danh sách.</p>
+    <p>Yuki đọc đi đọc lại đoạn ấy, tay run bần bật, cảm giác buồn nôn dâng lên tận cổ họng. Cô gấp vội lá thư, nhét vào túi áo, không dám nghĩ tiếp xem những "ứng viên" ấy có thể là những đứa trẻ nào.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-44">
+    <div class="chapter-eyebrow">Chương 44</div>
+    <h2>Bức Thư Thứ Hai</h2>
+    <p>Ngay cạnh vị trí lá thư đầu tiên, dán ở mặt sau một tấm bảng tin cũ, là một lá thư khác, cùng nét chữ, viết tiếp câu chuyện dang dở. Người viết báo rằng nhóm vận chuyển cấp trên sắp xuống kiểm tra khu vực này, nên cần tạm ngừng liên lạc — và nếu ai đó tìm thấy những lá thư này, cả hai người viết đều sẽ gặp rắc rối lớn. Danh sách "ứng viên" giờ đã được thu hẹp xuống còn ba cái tên, và người viết nói đây là "một quyết định quan trọng không thể quay đầu", đùa cợt một cách lạnh lùng về việc thích một đứa trẻ biết nói được nhiều hơn một ngôn ngữ.</p>
+    <p>Cuối thư, hai cái tên ký tắt hiện ra rõ ràng hơn cả: Uthman Adam, và Waverly Mason. Yuki khựng lại ở cái họ "Mason" — nó gợi cô nhớ đến điều gì đó, một cái tên cô từng thoáng thấy trong mảnh giấy viết tay của chính con mình, nhưng cô không dám để mình nghĩ tiếp theo hướng đó. Cô nhét nốt lá thư vào túi, cạnh lá thư trước, và bước đi nhanh hơn.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-45">
+    <div class="chapter-eyebrow">Chương 45</div>
+    <h2>Gã Hề Nổi Loạn</h2>
+    <p>Ở khu Feeding, một sinh vật mặt hề chia đôi màu — nửa tím cau có, nửa xanh lá cười toe toét — đứng giữa phòng, lẩm bẩm luyện tập một câu chuyện cười, giọng run lên vì phấn khích lẫn sợ hãi.</p>
+    <p>Nó tự xưng Bittergiggle, và không giấu giếm ý định: nó quyết tâm kể cho Queen Bouncelia nghe một câu chuyện cười, bất chấp việc đó là điều bị cấm tuyệt đối trong toàn Vương Quốc — bởi nếu nữ hoàng cười, những gì trong túi của nó sẽ sổ lồng. Toadster gầm gừ cảnh cáo, nhưng Bittergiggle chỉ cười khẩy, né qua và biến mất vào một hành lang khác trước khi Yuki kịp phản ứng.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-46">
+    <div class="chapter-eyebrow">Chương 46</div>
+    <h2>Kittysaurus</h2>
+    <p>Ngay sau đó, một sinh vật mèo khổng lồ — đồng minh của Bittergiggle — lao ra chặn đường, móng vuốt cào xuống sàn đầy hung hãn. Toadster ra hiệu cho Yuki đứng lên một công tắc đỏ giữa phòng, trong khi drone bay lượn trên cao, thu hút sự chú ý của con vật về phía trần nhà.</p>
+    <p>Bị đánh lạc hướng, Kittysaurus lao thẳng về phía chiếc drone đang lượn lờ, đâm sầm vào tường thay vì vào Yuki. Cô lặp lại chiến thuật ấy đủ bốn lần — vừa điều khiển drone nhử mồi, vừa đứng đúng vị trí công tắc — cho đến khi con vật gục xuống, choáng váng và bất động giữa đám bụi vữa tường.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-47">
+    <div class="chapter-eyebrow">Chương 47</div>
+    <h2>Mảnh Ghép Cuối Cùng</h2>
+    <p>Ở Employee Exercise Sector, bộ phận thang máy cuối cùng được giấu trên một bệ cao giữa phòng, chỉ drone mới với tới được. Yuki điều khiển nó bay thật chính xác qua một chuỗi tia laser đỏ chằng chịt — chỉ cần chạm nhẹ vào một tia là còi báo động sẽ vang lên khắp khu vực. Sau vài lần thử hụt hơi, drone cuối cùng cũng luồn lách trót lọt, gắp được mảnh kim loại cuối cùng mang về cho Yuki.</p>
+    <p>Cô cùng Toadster mang cả ba bộ phận trở lại chiếc thang máy đang chờ lắp ráp, ghép chúng vào đúng vị trí. Toadster gật đầu hài lòng lần đầu tiên kể từ khi Yuki gặp nó, ra hiệu quay trở lại phòng ngai vàng để báo cáo với nữ hoàng.</p>
+    <p>Nhưng khi họ vừa đến gần hành lang dẫn vào phòng ngai vàng, một cảm giác bất an trào lên trong lòng Yuki — có tiếng gì đó đang vỡ vụn từ bên trong.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-48">
+    <div class="chapter-eyebrow">Chương 48</div>
+    <h2>Bittergiggle Đã Ở Đó</h2>
+    <p>Yuki lao vào phòng ngai vàng, chỉ để thấy Bittergiggle và Kittysaurus — đã tỉnh lại sau trận đánh — đứng chắn ngay trước ngai của Queen Bouncelia. Bittergiggle run rẩy, nhưng ánh mắt đầy quyết tâm, rõ ràng đã quyết định không lùi bước lần này.</p>
+    <p>Toadster gầm lên, lao tới định ngăn cản, nhưng Kittysaurus chặn đường nó lại. Yuki đứng khựng giữa phòng, chim con trong tay cô bỗng vùng vẫy dữ dội, như thể cảm nhận được điều gì đó sắp xảy ra.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-49">
+    <div class="chapter-eyebrow">Chương 49</div>
+    <h2>Chiếc Thùng Givanium</h2>
+    <p>Giữa lúc hỗn loạn, chim con vùng khỏi tay Yuki, rơi thẳng xuống một chiếc thùng kim loại lớn đặt cạnh ngai vàng, chứa đầy chất lỏng phát sáng màu tím. Yuki chồm tới nhưng không kịp.</p>
+    <p>Chất lỏng trào lên sủi bọt dữ dội, và khi nó trồi lên khỏi miệng thùng, đó không còn là chú chim con bé nhỏ Yuki từng bế trên tay nữa. Một sinh vật hoàn toàn khác đứng thẳng dậy trước mặt cô — cao lớn ngang một người trưởng thành, đôi cánh tím sẫm xòe rộng ra hai bên với những lông vũ tua tủa như bị xé rách, chiếc mỏ vàng cong nhọn há ra gầm lên một tiếng chấn động cả căn phòng, hai chân vàng khẳng khiu bấu chặt xuống nền đá, và phía trên đôi mắt giờ đã đổi màu dữ tợn là hai chùm lông trắng dựng đứng như lông mày. Nó không còn là chim con nữa — nó đã trở thành một thứ gì đó lớn hơn, hoang dại hơn rất nhiều.</p>
+    <p>Nó lao thẳng vào Kittysaurus, hai con quái vật vật lộn dữ dội giữa đống đồ nội thất vỡ vụn, còn Yuki chỉ biết lùi lại, không còn cách nào ôm lấy hay vỗ về sinh vật ấy như trước được nữa.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-50">
+    <div class="chapter-eyebrow">Chương 50</div>
+    <h2>Câu Chuyện Cười Tệ Hại</h2>
+    <p>Giữa tiếng gầm rú của hai con quái vật, Bittergiggle vẫn đứng đó, run run cất giọng kể câu chuyện cười nó đã luyện tập trong cô độc suốt bao lâu — một câu chuyện cười, thành thật mà nói, không hề hay ho gì, vụng về và sáo rỗng đến mức chính Yuki cũng phải nhíu mày.</p>
+    <p>Nhưng Queen Bouncelia vẫn bật cười. Một tràng cười giòn tan, chân thành, vang khắp căn phòng — như thể đó là điều nó đã chờ đợi từ rất lâu, bất kể câu chuyện có dở đến đâu.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-51">
+    <div class="chapter-eyebrow">Chương 51</div>
+    <h2>The Naughty Ones</h2>
+    <p>Ngay khi tiếng cười vang lên, chiếc túi trước bụng Queen Bouncelia bùng nổ thành một luồng ánh sáng tím chói lòa. Từ trong đó, hàng chục sinh vật nhỏ, méo mó, mắt tím rực sáng, ồ ạt tràn ra như một cơn lũ, cắn xé và phá hoại mọi thứ trong tầm với.</p>
+    <p>Toàn bộ Vương Quốc rung chuyển. Những cột trụ trang trí cầu kỳ đổ sập, ánh đèn lộng lẫy vụt tắt dần trong tiếng la hét hỗn loạn của các sinh vật đang tháo chạy khắp nơi. Yuki ôm đầu, cố tìm đường thoát giữa cơn ác mộng ánh sáng tím đang lan rộng.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-52">
+    <div class="chapter-eyebrow">Chương 52</div>
+    <h2>Toadster Mở Hết Cửa Ngục</h2>
+    <p>Toadster kéo tay Yuki, lôi cô chạy về phía khu y tế gần đó. Thay vì tìm đường trốn, nó lao đến từng phòng giam một, bấm mở tung tất cả các ổ khóa — dường như tin rằng càng nhiều hỗn loạn, càng dễ len lỏi thoát thân giữa đám hỗn quân hỗn quan. Giữa lúc chạy, drone của Yuki vẫn bay là là phía trước, húc mở vài cánh cửa nhỏ chắn ngang lối đi mà cả hai không có thời gian dừng lại phá bằng tay.</p>
+    <p>Yuki ngoái đầu tìm sinh vật tím lớn — thứ từng là chim con — nhưng giữa đám bụi mù và những sinh vật The Naughty Ones đang lao loạn khắp nơi, cô chỉ kịp thấy bóng dáng nó khuất dần về một hướng hoàn toàn khác, cuốn theo dòng người và quái vật đang tán loạn. Cô gọi với theo trong vô vọng, nhưng tiếng cô lạc mất giữa tiếng gào thét chung. Không còn thời gian để quay lại tìm, Toadster đã kéo cô đi tiếp.</p>
+    <p>Cánh cửa cuối cùng bật mở, để lộ con sứa khổng lồ vẫn còn bị giam từ trước — Stinger Flynn, đôi mắt nó mở to đầy ngạc nhiên khi thấy cánh cửa phòng giam của mình đột ngột banh ra. Không nói một lời, nó lách qua cửa, nhập vào cùng Yuki và Toadster đang chạy trốn giữa những hành lang rung chuyển.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-53">
+    <div class="chapter-eyebrow">Chương 53</div>
+    <h2>Vương Quốc Sụp Đổ</h2>
+    <p>Yuki, Sheriff Toadster, và Stinger Flynn lao qua những hành lang đang sụp đổ dần sau lưng, bụi đá mù mịt, tiếng The Naughty Ones gào thét vọng lại từ mọi phía. Bittergiggle vẫn đuổi theo đâu đó phía sau, giọng nó lẫn vào trong tiếng hỗn loạn chung, không còn rõ là đang cười hay đang hoảng sợ. Yuki vẫn ngoái nhìn lại phía sau lần cuối, hy vọng thấy bóng dáng tím lớn kia xuất hiện, nhưng chỉ có bụi mù và bóng tối.</p>
+    <p>Nhóm lao được vào một căn phòng nhỏ còn nguyên vẹn ở rìa Vương Quốc, nơi cánh cửa thang máy vừa lắp ráp xong đang chờ sẵn — ba bộ phận rời rạc giờ đã ghép lại thành một khối hoàn chỉnh. Cả ba lao vào cabin đúng lúc tiếng gào thét của Bittergiggle vang lên rất gần phía sau.</p>
+    <p>Cánh cửa đóng sầm lại. Cabin bắt đầu hạ xuống, để lại phía sau toàn bộ Vương Quốc đang sụp đổ trong ánh sáng tím nhạt dần — và để lại cả sinh vật từng là chim con, lạc đâu đó giữa cơn hỗn loạn ấy. Yuki ngồi thụp xuống sàn cabin, ôm đầu gối, lòng nặng trĩu vì một mất mát khác chồng lên nỗi lo đã quá đủ đầy. Không ai trong ba người nói một lời nào, chỉ có tiếng cabin kẽo kẹt đưa họ xuống sâu hơn, sâu hơn nữa vào bóng tối.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-54">
+    <div class="chapter-eyebrow">Chương 54</div>
+    <h2>Nỗi Sợ Của Toadster</h2>
+    <p>Cabin dừng lại với một cú xóc nặng nề hơn mọi lần trước. Cánh cửa mở ra một tầng hoàn toàn tối tăm, không khí lạnh buốt khác hẳn sự lộng lẫy giả tạo của Vương Quốc vừa sụp đổ phía trên. Yuki quay lại tìm Stinger Flynn, nhưng chỗ nó đứng trong cabin đã trống không — không rõ nó đã tách ra từ lúc nào giữa những hành lang rung chuyển phía trên, chỉ để lại một vệt nước còn ướt trên sàn cabin.</p>
+    <p>Toadster bước ra trước, nhưng lần đầu tiên kể từ khi Yuki gặp nó, giọng nó run lên khi cất lời. Nó thú nhận rằng những gì vừa xảy ra ở trên — tiếng cười, ánh sáng tím, đám Naughty Ones — khiến chính nó cũng sợ hãi thật sự. Chỉ có một cách duy nhất để chấm dứt mối đe dọa ấy: tìm cho được Queen's Scepter, cây quyền trượng có khả năng phong ấn lại toàn bộ lũ sinh vật đã sổ lồng.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-55">
+    <div class="chapter-eyebrow">Chương 55</div>
+    <h2>Bittergiggle Hối Lỗi</h2>
+    <p>Ở khu vực đầu tiên của tầng mới, một bóng dáng quen thuộc đứng co ro trong góc tối — Bittergiggle, nhưng không còn vẻ nổi loạn hay hào hứng như lần trước. Nó cúi gằm mặt, giọng nghẹn lại khi nhận ra chính trò đùa của mình đã gián tiếp gây ra thảm họa vừa rồi.</p>
+    <p>Nó xin được đi cùng, muốn chuộc lại lỗi lầm bằng cách giúp nhóm tìm quyền trượng. Toadster nhìn nó dò xét một lúc lâu, rồi miễn cưỡng gật đầu. Cả nhóm — giờ có thêm Bittergiggle — bắt đầu tiến sâu hơn vào khu vực đầy công tắc và cơ chế phức tạp phía trước.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-56">
+    <div class="chapter-eyebrow">Chương 56</div>
+    <h2>Công Tắc Khắp Nơi</h2>
+    <p>Nhiều khu vực nối tiếp nhau — nơi Toadster gọi là Conditioning Sector, rồi đến Potentiality Sector — mỗi nơi đều đòi hỏi kích hoạt toàn bộ công tắc ẩn trước khi cánh cửa tiếp theo chịu mở ra. Yuki thả drone bay dọc các bức tường cao, nhấn từng công tắc một trong khi Bittergiggle đứng canh và Toadster dò đường phía trước.</p>
+    <p>Có những công tắc giấu sau các tấm lưới thông gió hẹp, có cái nằm trên trần cao đến mức drone phải bay gần hết pin mới chạm tới. Cứ mỗi khu vực hoàn thành, không khí quanh họ lại càng lạnh hơn, như thể họ đang tiến sâu vào một nơi đã bị lãng quên từ rất lâu.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-57">
+    <div class="chapter-eyebrow">Chương 57</div>
+    <h2>Những Đứa Trẻ Givanium</h2>
+    <p>Trong một căn phòng phụ, Yuki bắt gặp thứ khiến cô lạnh toát sống lưng — hàng dãy nôi nhỏ xếp thành hàng, mỗi cái chứa một sinh vật bé xíu, mềm oặt, làn da trong suốt ánh lên màu tím nhạt của Givanium. Chúng cựa quậy yếu ớt, phát ra những tiếng rên khe khẽ không giống tiếng khóc trẻ con, cũng chẳng giống tiếng kêu của con vật nào cô từng biết.</p>
+    <p>Bittergiggle gọi chúng là "Givanium Infants" — kết quả của những thử nghiệm còn dang dở, chưa bao giờ hoàn thiện thành một dạng sống cụ thể nào. Yuki đứng lặng người trước dãy nôi ấy một lúc lâu, cảm giác buồn nôn dâng lên, trước khi Toadster nhẹ nhàng kéo cô đi tiếp, không nói thêm lời nào.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-58">
+    <div class="chapter-eyebrow">Chương 58</div>
+    <h2>Kẹo Mút Cho Bệnh Nhân</h2>
+    <p>Gần phòng phẫu thuật của một sinh vật tự xưng Syringeon — dù bản thân nó không xuất hiện, chỉ để lại một tấm bảng nhiệm vụ viết tay run rẩy — Yuki tìm thấy yêu cầu kỳ lạ: thu thập đủ tám cây kẹo mút rải rác khắp phòng, đặt vào một chiếc cốc cạnh cánh cửa đỏ, "để bệnh nhân được vui".</p>
+    <p>Cô lần lượt nhặt từng cây kẹo trên tủ thuốc, dưới gầm giường bệnh, cả trên một cánh tay cơ khí gãy nằm chỏng chơ góc phòng. Khi cây kẹo cuối cùng được đặt vào cốc, cánh cửa đỏ bật mở với một tiếng "cạch" nhẹ nhõm.</p>
+    <p>Ngay lúc đó, Toadster khựng lại, tai dựng lên như đang nghe thấy điều gì đó từ xa. Nó nói có tiếng động lạ phát ra từ hướng ngược lại, và tách khỏi nhóm để đi kiểm tra, dặn Yuki cùng Bittergiggle cứ tiếp tục tiến về phía quyền trượng, nó sẽ bắt kịp sau. Ngay khi nó vừa khuất bóng, một hình dáng đỏ quen thuộc bước ra từ một hành lang khác — Banban, lặng lẽ nhập lại vào nhóm như thể đã đi theo từ xa suốt cả chặng đường. Cả ba — Yuki, Banban, và Bittergiggle — tiếp tục tiến về phía căn phòng chứa quyền trượng.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-59">
+    <div class="chapter-eyebrow">Chương 59</div>
+    <h2>Phòng Quyền Trượng</h2>
+    <p>Căn phòng cuối cùng hiện ra trước mắt cả nhóm — chính giữa là một chiếc hộp kính trưng bày Queen's Scepter, ánh kim loại lấp lánh dưới thứ ánh sáng yếu ớt duy nhất còn sót lại trong tầng này. Banban và Bittergiggle cùng Yuki hì hục phá lớp khóa niêm phong, cuối cùng cũng mở được nắp hộp.</p>
+    <p>Nhưng ngay khi cánh tay Yuki vừa chạm tới quyền trượng, Nabnab bất ngờ lao ra từ bóng tối, nhảy bổ lên bảng điều khiển cạnh hộp và nhấn liên tục vào một nút màu đỏ ghi chữ "EJECT". Cơ chế bên trong hộp rít lên, bật tung quyền trượng ra ngoài với một lực mạnh đến mức nó văng xuống sàn, lăn vài vòng rồi dừng lại — thiếu hẳn một mảnh ở phần đầu.</p>
+    <p>Bittergiggle nhặt quyền trượng lên, xoay đi xoay lại, rồi tái mặt. Nó lắp bắp rằng mảnh còn thiếu ấy chắc chắn đang nằm trong tay Syringeon — không ai khác có thể giữ nó.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-60">
+    <div class="chapter-eyebrow">Chương 60</div>
+    <h2>Sir Dadadoo Và Đội Quân</h2>
+    <p>Chưa kịp định thần, cánh cửa phía sau họ bị hất tung. Một bóng hình cao lớn, thanh lịch một cách kỳ dị nhưng ánh mắt lạnh lẽo đầy thù hận, xông vào — không hề đơn độc. Theo sau nó là cả một đám The Naughty Ones nhỏ, mắt tím rực, lúc nhúc bám theo từng bước chân.</p>
+    <p>Nó tự xưng Sir Dadadoo, tuyên bố đến đây để đoạt lại quyền trượng và trả thù tất cả những kẻ từng phản bội mình từ rất lâu trước. Ánh mắt nó quét qua cả nhóm, dừng lại ở Bittergiggle. Nó gầm lên, đe dọa sẽ ăn thịt Kittysaurus ngay lập tức nếu Bittergiggle không khai ra vị trí của Sheriff Toadster và kẻ nó gọi là "The Surgeon". Bittergiggle run lẩy bẩy, môi mấp máy nhưng không thốt ra được lời nào.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-61">
+    <div class="chapter-eyebrow">Chương 61</div>
+    <h2>Mũi Tiêm Bí Mật</h2>
+    <p>Giữa lúc Sir Dadadoo còn mải gầm gừ đe dọa, Banban lặng lẽ tiến về phía Nabnab — vẫn đang đứng cạnh bảng điều khiển — với vẻ mặt thân thiện bất thường, như thể đang định làm hòa. Nabnab hơi chững lại, có phần bối rối trước cử chỉ ấy.</p>
+    <p>Ngay khi đã đủ gần, Banban rút phắt từ trong áo một ống tiêm chứa chất lỏng phát sáng màu tím, đâm mạnh vào người Nabnab không chút do dự. Con nhện giật nảy, gào lên một tiếng đau đớn xé tai, thân hình nó phồng to, tối sẫm lại, biến thành một dạng Hellish khổng lồ chưa từng thấy trước đó.</p>
+    <p>Nabnab dạng mới lao thẳng vào Sir Dadadoo với sức mạnh áp đảo, hai bên vật lộn dữ dội, tạo ra đúng khoảng trống hỗn loạn Banban cần. Nó quay sang hét lớn, ra hiệu cho Yuki và Bittergiggle chạy ngay lập tức.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-62">
+    <div class="chapter-eyebrow">Chương 62</div>
+    <h2>Cả Đàn Đuổi Theo</h2>
+    <p>Cả ba lao ra khỏi phòng quyền trượng, băng qua một khu vườn bụi rậm mọc um tùm bất thường giữa lòng cơ sở ngầm — có lẽ tàn tích của một khu vực trồng trọt bị bỏ hoang từ rất lâu. Phía sau, cả đàn Naughty Ones đuổi sát gót họ qua từng bụi cây, hàng chục cái bóng nhỏ lúc nhúc, tiếng móng vuốt cào sồn sột trên đất vang lên từ mọi phía.</p>
+    <p>Yuki, Banban, và Bittergiggle len lỏi qua các lối mòn hẹp, cành lá quất vào mặt, cho đến khi họ lao ra một khoảng sân trống — nơi có hai giếng thang máy đặt song song nhau. Một cái còn nguyên cabin sáng đèn chờ sẵn. Cái còn lại chỉ là một miệng hố đen ngòm, sâu hun hút không nhìn thấy đáy.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-63">
+    <div class="chapter-eyebrow">Chương 63</div>
+    <h2>Bittergiggle Nhảy Xuống</h2>
+    <p>Ngay trước cửa cabin an toàn, Bittergiggle bất chợt dừng phắt lại, dù tiếng cả đàn Naughty Ones vẫn đang gầm gừ đâu đó rất gần phía sau.</p>
+    <p>Nó quay sang nhìn Yuki, ánh mắt bình thản đến kỳ lạ giữa cảnh hỗn loạn. Nó nói rằng suốt đời mình chỉ mong có ai đó thật sự cười trước những câu chuyện của nó — và đây, có lẽ, là cơ hội duy nhất để có được một khán giả thật sự: The Naughty Ones, dù đáng sợ đến đâu, cũng là những kẻ duy nhất từng bật cười thành thật trước nó. Trước khi Yuki kịp ngăn lại, Bittergiggle quay người, nhảy thẳng xuống giếng thang máy trống bên cạnh, biến mất vào bóng tối không đáy.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-64">
+    <div class="chapter-eyebrow">Chương 64</div>
+    <h2>Đội Quân Naughtified</h2>
+    <p>Yuki và Banban bước vào cabin còn lại. Ngay khi cánh cửa chuẩn bị khép, toàn bộ đèn trong khoang bỗng phụt tắt. Một khoảng im lặng dài đến nghẹt thở trôi qua, rồi đèn bật sáng trở lại.</p>
+    <p>Sir Dadadoo đứng sừng sững ngay trước cửa cabin, chặn đường khép lại — và phía sau nó không chỉ còn là đám Naughty Ones nhỏ nữa, mà là cả một đội quân đầy đủ các mascot đã bị "Naughtified", mắt tất cả đều nhuộm một màu tím dữ tợn: Bittergiggle — đã bị nhiễm ngay khi vừa rơi xuống — cô giáo trắng, con chim hồng hạc, con chim to lớn Yuki từng cưỡi, con mèo khổng lồ, con nhện tím từng được đánh thức bằng chính tay Yuki, cùng con rồng hai đầu. Sir Dadadoo cất giọng lạnh lùng, tuyên bố sẽ biến cả Banban lẫn Yuki thành một phần của đội quân ấy.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-65">
+    <div class="chapter-eyebrow">Chương 65</div>
+    <h2>Banban Hy Sinh</h2>
+    <p>Banban đẩy mạnh Yuki lùi sâu vào trong cabin, tự mình đứng chắn ngay khung cửa. Nó không quay đầu lại nhìn cô lấy một lần.</p>
+    <p>Cả đội quân Naughtified lao vào đồng loạt. Banban chỉ kịp gồng mình chống đỡ vài giây trước khi bị nhấn chìm hoàn toàn giữa những móng vuốt, những cánh tay biến dạng cào xé khắp thân thể nó. Yuki nghe rõ tiếng hét đau đớn của nó vọng qua khe cửa đang khép dần, xen giữa đó là một câu cuối cùng, đứt quãng nhưng dứt khoát: <em>"Tìm... Syringeon..."</em></p>
+    <p>Cánh cửa cabin đóng sập lại, cắt đứt hình ảnh cuối cùng ấy. Thang máy bắt đầu hạ xuống trong im lặng tuyệt đối. Yuki ngồi thụp xuống sàn, hai tay ôm lấy đầu, không còn nước mắt để khóc thêm cho một sự hy sinh nữa. Màn đêm bên ngoài cabin đặc quánh dần, nuốt chửng mọi âm thanh còn sót lại từ phía trên.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-66">
+    <div class="chapter-eyebrow">Chương 66</div>
+    <h2>Bàn Phẫu Thuật</h2>
+    <p>Yuki tỉnh dậy trong ánh đèn trắng chói gắt, cổ tay và mắt cá chân bị ghì chặt xuống một chiếc bàn kim loại lạnh buốt. Cúi xuống sát mặt cô là một sinh vật cao gầy khoác áo phẫu thuật, bốn cánh tay cơ khí vươn ra từ hai bên hông, mỗi cái cầm một dụng cụ sáng loáng khác nhau.</p>
+    <p>Nó lẩm bẩm một tràng dài — về sự "may mắn" của con người khi được trở thành một phần trong công trình vĩ đại hơn bản thân, về việc Yuki sẽ chết trong vinh quang chứ không phải như một kẻ vô danh bị lãng quên. Nó vươn một cánh tay ra sau, gọi trợ lý đưa kéo. Nhưng thứ đặt vào tay nó lại là một cây búa.</p>
+    <p>Cơn giận dữ bùng nổ ngay lập tức — nó quay phắt lại, gầm lên những lời mắng nhiếc tàn nhẫn về sự vô dụng, rồi một cánh tay cơ khí vung mạnh. Tiếng động khô khốc, rồi im bặt. Trợ lý của nó đã không còn cử động. Giữa khoảnh khắc hỗn loạn ấy, Yuki vặn mình hết sức, giật đứt được một bên dây trói, rồi lăn khỏi bàn phẫu thuật, lao thẳng ra cửa trước khi con quái vật kịp quay đầu lại.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-67">
+    <div class="chapter-eyebrow">Chương 67</div>
+    <h2>Cứu Syringeon</h2>
+    <p>Yuki chạy không định hướng qua những hành lang xa lạ, cho đến khi lao ra một con phố nhỏ kỳ dị — nhà cửa san sát, biển hiệu sáng đèn, như một thị trấn thu nhỏ bị nhốt dưới lòng đất. Phía sau, tiếng bước chân cơ khí đuổi theo không ngừng nghỉ, cùng giọng gầm gừ đầy thù hận của con quái vật phẫu thuật.</p>
+    <p>Nhưng một mối đe dọa khác còn đáng sợ hơn xuất hiện — một sinh vật khổng lồ, méo mó, lao ra từ một con hẻm, nhắm thẳng vào cả hai. Bản năng sinh tồn đẩy Yuki lao vào phụ giúp, né tránh và tấn công cho đến khi con quái vật kia gục ngã.</p>
+    <p>Con phẫu thuật gia thở hổn hển, nhìn Yuki với ánh mắt khó tin. Nó tự xưng Syringeon, cúi đầu cảm ơn vì đã cứu mạng — và hứa, dù có phần miễn cưỡng, rằng sẽ không làm hại cô nữa. Ít nhất là không phải bây giờ.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-68">
+    <div class="chapter-eyebrow">Chương 68</div>
+    <h2>Remote Control 2.0</h2>
+    <p>Syringeon dẫn Yuki vào một căn phòng làm việc bừa bộn đầy bản vẽ và mẫu vật. Nó giải thích: đang giữ mảnh cuối cùng của quyền trượng, và tuyệt đối không có ý định để nó rơi vào tay kẻ đang truy đuổi khắp thành phố này — Sir Dadadoo.</p>
+    <p>Kế hoạch của nó xoay quanh một sinh vật khổng lồ màu xanh từng tấn công thành phố nhỏ này vài giờ trước — Yuki nhận ra ngay đó chính là con quái vật cô từng thấy nằm bất tỉnh rất lâu về trước. Syringeon tin rằng nếu bắt lại được nó, họ có thể dùng nó làm vũ khí chống lại cả đội quân của Dadadoo.</p>
+    <p>Nó trao cho Yuki một thiết bị mới — Remote Control 2.0 — cho phép truy cập các bảng điều khiển theo một cách khác hẳn chiếc drone cũ, rồi cử cô đi dò hỏi các nhân chứng rải rác khắp thành phố, trong lúc bản thân nó ở lại xử lý hậu quả của cuộc chạm trán vừa rồi.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-69">
+    <div class="chapter-eyebrow">Chương 69</div>
+    <h2>Những Nhân Chứng</h2>
+    <p>Người nhân chứng đầu tiên Yuki tìm gặp đứng giữa phố, khinh khỉnh nhìn cô từ đầu đến chân trước khi chịu hợp tác — yêu cầu một tờ giấy để vẽ lại hình dáng con quái vật xanh đã thấy. Yuki tìm được giấy, và đổi lại một bức phác họa vội vàng, kèm lời dặn mang nó đến quầy bar gần đó để hỏi thêm.</p>
+    <p>Người pha chế sau quầy bar nhìn Yuki với vẻ ghê tởm ra mặt, từ chối nói chuyện với "loài người bẩn thỉu" — cho đến khi cô đưa ra giấy tờ tùy thân nào đó xác nhận mình đến từ chỗ Syringeon. Thái độ hắn dịu lại tức thì; sau khi xem bức vẽ, hắn ra hiệu cho cô vào phòng trong, nơi có người muốn nói chuyện tiếp.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-70">
+    <div class="chapter-eyebrow">Chương 70</div>
+    <h2>Tiếng Ồn Trên Lầu</h2>
+    <p>Manh mối tiếp theo dẫn Yuki đến một khu chung cư nhỏ, nơi một cư dân đang giận dữ phàn nàn về tiếng ồn không dứt từ căn hộ tầng trên — gào thét, đập phá suốt cả giờ đồng hồ. Chỉ khi Yuki hứa sẽ giải quyết chuyện đó, người này mới chịu chia sẻ những gì mình biết về con quái vật xanh.</p>
+    <p>Lên đến căn hộ ồn ào, Yuki phát hiện nguồn cơn: một cái bóng méo mó, nửa tím nửa xanh, đang gào thét điên loạn trong phòng tắm — hình dạng biến chất đến mức khó nhận ra, nhưng có gì đó trong dáng vẻ khiến cô rùng mình nhớ đến một gương mặt hề quen thuộc. Một cư dân khác đã hoảng sợ chui tọt xuống gầm giường, không chịu ra dù Yuki gọi thế nào. Cô đành lặng lẽ rút lui, để họ yên, và quay lại báo với người phàn nàn rằng sự ồn ào đã tạm ngưng.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-71">
+    <div class="chapter-eyebrow">Chương 71</div>
+    <h2>Rạp Hát</h2>
+    <p>Trên đường tiếp theo, một cư dân ngồi bất động, thì thầm xin Yuki đi nhẹ chân — anh ta đang trong một "cuộc thi nhìn chằm chằm" căng thẳng với đối thủ không hề chớp mắt: một hình nộm đầu bếp nhỏ đứng lặng câm. Yuki lặng lẽ đi vòng qua, không muốn phá vỡ sự tập trung kỳ quặc ấy.</p>
+    <p>Ở quầy vé một rạp hát gần đó, nhân viên bán vé ném cho cô một cái nhìn khinh miệt trước khi chỉ đường đến khán phòng duy nhất chưa bị phong tỏa — cảnh báo rằng cô sẽ không có một buổi tối dễ chịu ở đó. Bên trong, một cư dân say mê nghệ thuật tiếp cận Yuki, nói rằng vở kịch mãi không chịu bắt đầu diễn, và đề nghị đổi một chiếc vòng cổ lấy sự giúp đỡ của cô để buổi diễn được tiếp tục.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-72">
+    <div class="chapter-eyebrow">Chương 72</div>
+    <h2>Trojan Tarta</h2>
+    <p>Yuki bật đèn sân khấu, và vở kịch bắt đầu: một câu chuyện về một nhân vật quyết tâm mang một món quà bí ẩn đi thật xa trước khi mở ra, gửi tặng cho một đôi chim yêu nhau bị chia cắt. Người xem say mê ngồi cạnh Yuki, thì thầm rằng đây đã là lần xem thứ mấy trăm của anh ta, và lần này anh muốn thêm "một chút gia vị đặc biệt" cho vở diễn.</p>
+    <p>Đúng lúc đó, một kiện hàng được giao đến cửa chính. Yuki mang nó vào sân khấu theo yêu cầu — và giữa cảnh diễn, "món quà" trong kiện hàng ấy, vốn được ngụy trang thành một con chim giả, bắt đầu rung lắc dữ dội. Nó vỡ tung, để lộ Tarta Bird — không phải giả, mà là thật, khổng lồ và giận dữ — lao thẳng vào giữa khán phòng đang hoảng loạn.</p>
+    <p>Yuki chiến đấu giữa những hàng ghế đổ nát, cuối cùng hạ được con chim. Người xem say mê nghệ thuật, dù suýt mất mạng, vẫn giữ đúng lời hứa — trao cho cô chiếc vòng cổ định vị, giải thích rằng một thợ săn tiền thưởng nào đó từng cắm được một thiết bị theo dõi lên con quái vật xanh, và chiếc vòng này sẽ kêu nhanh dần khi đến gần nó.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-73">
+    <div class="chapter-eyebrow">Chương 73</div>
+    <h2>Tool Mart</h2>
+    <p>Theo tiếng kêu của chiếc vòng cổ, Yuki đến một cửa hàng dụng cụ tối om. Syringeon đã theo kịp, đứng chờ ngoài cửa, giải thích rằng một đội thợ săn tiền thưởng từng được cử đến đây trước đó — và không ai trong số họ quay trở lại. Nó ở lại canh cửa, để Yuki một mình vào trong dò xét.</p>
+    <p>Bên trong tối đến mức chiếc vòng cổ là ánh sáng duy nhất dẫn đường. Yuki lần theo tiếng kêu ngày một dồn dập, cho đến khi tìm thấy một vũng chất lỏng phát sáng màu tím còn tươi — mẫu Givanium, dấu vết của con quái vật xanh bị thương trong lúc chạy trốn bóng tối nơi đây.</p>
+    <p>Ở một góc khuất, cô tìm thấy người thợ săn cuối cùng còn thoi thóp. Anh ta gọi nhầm cô là "cha", thì thào một lời cảnh báo cuối cùng đứt quãng — rằng cô không phải là kẻ đi săn ở nơi này, mà chính là con mồi — trước khi tắt thở hẳn. Yuki mang mẫu Givanium quay trở ra, tay run lên vì vừa chứng kiến một cái chết nữa.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-74">
+    <div class="chapter-eyebrow">Chương 74</div>
+    <h2>Cái Bẫy</h2>
+    <p>Syringeon nhận lấy mẫu Givanium, ánh mắt sáng lên đầy toan tính. Nó kể rằng chính bản thân từng bị cơ sở bỏ rơi xuống các tầng dưới cùng nhiều Case khác, rồi được "tái sử dụng" nhờ bốn cánh tay cơ khí không biết mệt mỏi — và cũng chính nó là kẻ đã trực tiếp tạo ra con quái vật xanh khổng lồ ấy, khiến nó mang bản năng của một con thú hoang hơn là một sinh vật có lý trí.</p>
+    <p>Nó tẩm mẫu Givanium vừa thu được lên chính mảnh quyền trượng cuối cùng — đủ mạnh để thu hút cả con quái vật xanh lẫn khứu giác nhạy bén của bất kỳ ai từng "ngửi" qua Givanium. Kế hoạch: cố tình dâng nộp mảnh quyền trượng ấy cho Sir Dadadoo, dụ hắn cùng toàn bộ đội quân đến đúng nơi đã định trước.</p>
+    <p>Yuki đứng lặng, nhìn Syringeon chuẩn bị mồi nhử với một sự bình thản lạnh lùng đến rợn người, tự hỏi liệu quyết định tin tưởng kẻ vừa suýt mổ sống mình có phải là một sai lầm.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-75">
+    <div class="chapter-eyebrow">Chương 75</div>
+    <h2>Jumbo Josh Xuất Trận</h2>
+    <p>Kế hoạch được thực hiện tại quảng trường trung tâm Cityngeon. Syringeon giơ cao mảnh quyền trượng đã tẩm mồi, hét lớn gọi tên Sir Dadadoo, tuyên bố đầu hàng và dâng nộp vật báu cuối cùng. Không lâu sau, Sir Dadadoo xuất hiện, dẫn theo toàn bộ đội quân Naughtified — hàng chục sinh vật quen thuộc, ánh mắt đều nhuốm màu tím dữ tợn, vây kín quảng trường.</p>
+    <p>Đúng lúc Dadadoo giơ tay nhận lấy mảnh quyền trượng, một tiếng gầm chấn động mặt đất vang lên từ một con hẻm tối. Con quái vật xanh khổng lồ — thứ Yuki từng thấy nằm bất tỉnh dưới tấm nền công nhân rất lâu về trước — lao ra, đấm ngực gầm lên rồi xông thẳng vào trận chiến.</p>
+    <p>Nó đấm thẳng vào mặt con mèo khổng lồ đang gần đó nhất, hất văng nó vào tường với một tiếng va chạm khô khốc. Khi cô giáo trắng nhảy vào cản đường, nó túm lấy và ném cô bay xa. Con nhện tím bò khắp người nó cố gây rối loạn, nhưng chẳng mảy may làm nó chậm lại. Con rồng hai đầu cùng lao tới ép nó vào tường — chỉ để lãnh trọn một cú đấm thẳng vào miệng, gãy hàm, gục xuống ngay tại chỗ. Cuối cùng, nó túm lấy chính Sir Dadadoo, quật mạnh xuống đất, và giáng liên tiếp những cú đấm cho đến khi kẻ cầm đầu hoàn toàn bất động, không còn cử động.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-76">
+    <div class="chapter-eyebrow">Chương 76</div>
+    <h2>Sau Trận Chiến</h2>
+    <p>Khi bụi lắng xuống, toàn bộ những sinh vật từng bị "Naughtified" từ từ tỉnh lại, ánh mắt trở lại bình thường, ngơ ngác nhìn quanh quảng trường ngổn ngang. Xác của The Naughty Ones nằm rải rác khắp các con phố nhỏ của Cityngeon, không còn động đậy.</p>
+    <p>Syringeon đứng cạnh Yuki, nhìn quang cảnh ấy hồi lâu, rồi thừa nhận — bằng một giọng điệu hiếm hoi không còn kiêu ngạo — rằng đây là lần đầu tiên sau rất lâu, nó không còn cảm thấy sợ hãi cho tính mạng của chính mình. Chiếc quyền trượng, trong lúc hỗn chiến, đã bị phá hủy hoàn toàn. Syringeon nói điều đó có lẽ tốt hơn — không ai nên nắm giữ một thứ quyền lực lớn đến vậy.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button class="next-btn">Chương sau →</button></div>
+  </article>
+
+  <article class="subview" id="chap-77">
+    <div class="chapter-eyebrow">Chương 77</div>
+    <h2>Cánh Cửa Bí Mật</h2>
+    <p>Trong lúc nghỉ ngơi tại văn phòng của Syringeon, Yuki nhận ra một cánh cửa nhỏ, khuất trong góc phòng, khóa kín bằng một ổ khóa cũ kỹ khác hẳn phần còn lại của căn phòng hiện đại. Cô hỏi về nó bằng ánh mắt.</p>
+    <p>Syringeon liếc qua, rồi quay đi ngay lập tức, giọng đanh lại: tốt nhất nên để yên cánh cửa đó, không ai biết được thứ gì nằm phía sau. Nó buông một câu cảnh báo cuối cùng, lạnh lẽo đến kỳ lạ — đừng bao giờ đùa với ác quỷ — trước khi rời đi nghỉ ngơi, để Yuki lại một mình trong căn phòng yên tĩnh.</p>
+    <p>Nhưng Yuki đã đi đến quá xa, đã mất quá nhiều, để dừng lại trước một cánh cửa khóa. Cô đặt tay lên ổ khóa cũ kỹ, cạy nó ra bằng chính sự quyết liệt đã mang cô đi suốt từ Sảnh Chính của Banban Kindergarten cho đến tận nơi đây. Ổ khóa bật ra với một tiếng "cạch" khô khốc.</p>
+    <p>Phía sau cánh cửa là một cầu thang hẹp dẫn xuống, tối đến mức không nhìn thấy đáy. Một luồng khí lạnh phả lên từ dưới sâu, mang theo một mùi gì đó khó tả — vừa quen thuộc, vừa xa lạ đến rợn người. Yuki hít một hơi thật sâu, và bước xuống.</p>
+    <div class="chap-footer"><button class="prev-btn">← Chương trước</button><button disabled>Chương sau →</button></div>
+    <div class="end-tag">— C Ò N &nbsp; T I Ế P —</div>
+  </article>
+
+</div>
+
+<!-- ============ NHÂN VẬT ============ -->
+<div class="view" id="view-characters">
+  <h1 class="section-title">Linh Vật Của Banban Kindergarten</h1>
+  <p class="section-sub">Sáu gương mặt xuất hiện trên Mural ở sảnh chính — mỗi con đều có một khẩu hiệu thân thiện, và một sự thật khác đằng sau nó.</p>
+
+  <div class="lore-box">
+    <div class="lore-title">Lưu ý về vai trò trong Phần 1</div>
+    <p>Opila Bird <strong>không phải phản diện chính</strong> của cả series — nó chỉ là một trong nhiều linh vật, đóng vai trò quái vật thử thách của riêng Playroom trong Phần 1. Mỗi Phần tiếp theo của Garten of Banban giới thiệu một (hoặc vài) linh vật giữ vai trò trung tâm khác nhau — không có một "trùm cuối" xuyên suốt toàn series tính đến hiện tại.</p>
+  </div>
+
+  <div class="char-grid">
+
+    <div class="char-card" style="--accent:#d98a92">
+      <div class="char-name">Opila Bird</div>
+      <div class="char-role">Quái vật của Playroom · Phần 1</div>
+      <div class="char-motto">"Laughter is the best medicine!"</div>
+      <p class="char-desc">Chim hồng hạc khổng lồ màu hồng nhạt, mỏ vàng cam sắc nhọn, đôi mắt tròn đen vô hồn khi ở trạng thái mô hình. Là quái vật gắn với riêng khu vực Playroom trong Phần 1 — người chơi phải cho nó ăn đủ 6 quả trứng để nhận thẻ từ, trước khi nó "sống dậy" với đôi mắt đỏ trắng rực sáng và rượt đuổi nghẹt thở qua con đường ván gỗ bắc ngang vực thẳm. Nó không xuất hiện xuyên suốt cả series.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#6fae52">
+      <div class="char-name">Jumbo Josh</div>
+      <div class="char-role">Đe dọa cuối Phần 1</div>
+      <div class="char-motto">"Eat vegetables and fruits to become strong like me!"</div>
+      <p class="char-desc">Quái vật cơ bắp khổng lồ màu xanh lá với nụ cười lớn. Xuất hiện rõ nhất ở đoạn cao trào cuối Phần 1 — bàn tay khổng lồ của nó bất ngờ đập sập cabin thang máy khi nhân vật đang hạ xuống tầng ngầm. Sang Phần 2, chính nó cũng là ân nhân bất ngờ — đập bẹp Banbaleena ngay trước cửa thang máy để cứu người chơi.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#b5484a">
+      <div class="char-name">Banban</div>
+      <div class="char-role">Phần 1: chỉ trên tranh · Phần 2: xuất hiện thật</div>
+      <div class="char-motto">"Sharing is caring! Your pancreas is mine."</div>
+      <p class="char-desc">Sinh vật hình người màu đỏ, hai chiếc sừng nhỏ trên đầu. Trong Phần 1, Banban chỉ xuất hiện qua Mural và poster. Sang Phần 2, hắn lộ diện thật — đấm ngất người chơi lúc đầu chương, rồi sau đó xin lỗi qua lớp kính an ninh và tiết lộ hắn cần Drone để cùng xuống vực thẳm (The Abyss) tìm những đứa trẻ mất tích.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#c9c6b8">
+      <div class="char-name">Banbaleena</div>
+      <div class="char-role">Phần 1: chỉ trên Mural · Phần 2: phản diện lớp học</div>
+      <div class="char-motto">"Kindness is your best asset!"</div>
+      <p class="char-desc">Phiên bản nữ màu trắng của Banban, mặc váy nơ, tai linh vật, đóng vai cô giáo thân thiện. Ở Phần 1 chỉ xuất hiện trên Mural — nhưng sang Phần 2, cô trở thành phản diện chính của khu lớp học: ép người chơi làm ba bài kiểm tra, sẵn sàng lao tới đập bẹp nếu trả lời sai, và truy đuổi gắt gao ở đoạn cao trào cuối chương trước khi bị Jumbo Josh đè bẹp ngay trước cửa thang máy.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#6f7dc7">
+      <div class="char-name">Captain Fiddles</div>
+      <div class="char-role">Hình ảnh trên poster</div>
+      <div class="char-motto">"Oooof!"</div>
+      <p class="char-desc">Sinh vật nhỏ nhắn màu xanh dương/tím, hình dáng tròn trịa như một khối bông có tay chân. Vai trò của nó vẫn giới hạn ở Mural và các poster rải rác quanh trường — khẩu hiệu ngắn gọn nhất trong cả các linh vật.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#c9b23f">
+      <div class="char-name">Slow Seline</div>
+      <div class="char-role">Mối đe dọa mới · Phần 2</div>
+      <p class="char-desc">Con ốc sên khổng lồ màu vàng. Trong Phần 2, nó xuất hiện rải rác ở một vài đoạn — quan sát người chơi từ trên cao hoặc gắn với các cơ chế parkour tại khu vực giống bãi biển giả — chứ chưa giữ vai trò đối đầu trực tiếp xuyên suốt như hai quái vật chính của chương là Nabnab và Banbaleena.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#6fae52">
+      <div class="char-name">Nabnab</div>
+      <div class="char-role">Quái vật hành lang y tế · Phần 2</div>
+      <p class="char-desc">Con nhện màu xanh lá với đôi mắt trố và chiếc lưỡi dài, bò trên trần khu Medical Sector. Người chơi phải vừa bật đèn bằng Drone vừa chiếu đèn pin liên tục lên nó để ngăn nó lao xuống tấn công, trước khi tháo chạy và hạ cửa chắn khẩn cấp ngay trước mặt nó.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#6f7dc7">
+      <div class="char-name">Sheriff Toadster</div>
+      <div class="char-role">Phần 2: chỉ qua băng rôn · Phần 3: khu vực riêng</div>
+      <p class="char-desc">Chú ếch cảnh sát. Ở Phần 2 mới chỉ xuất hiện qua các băng rôn giới thiệu trong khu y tế. Sang Phần 3, cả một khu vực mang phong cách trò chơi của nó xuất hiện — nhiệm vụ "bắt tội phạm" thu thập các xô màu hồng — cùng hồ sơ hé lộ nó được tạo ra từ một con cóc tiêm Givanium và DNA người, dù bản thân Sheriff Toadster vẫn chưa lộ diện trực tiếp.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#d98a3f">
+      <div class="char-name">Stinger Flynn</div>
+      <div class="char-role">Phần 1–2: chỉ trên Mural · Phần 3: nhân vật trung tâm</div>
+      <div class="char-motto">"Having 6 arms allows me to help much more people!"</div>
+      <p class="char-desc">Con sứa khổng lồ màu cam với một con mắt lớn duy nhất ở giữa, sáu cánh tay dang rộng — được tạo từ DNA người, sứa, và Givanium (Case 13), thông minh và có nhận thức vượt trội hơn hẳn các thí nghiệm khác. Ở Phần 3, nó trở thành nhân vật trung tâm: đưa người chơi vào hai giấc mơ ảo giác (bãi biển và chuyến xe sa mạc) để thuyết phục từ bỏ việc tìm con, đồng thời âm thầm lợi dụng Banban. Cuối chương, nó cũng bị Jumbo Josh đánh bại khi cố ngăn cản trận chiến với Hellish Banban.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#6fae52">
+      <div class="char-name">Nabnaleena</div>
+      <div class="char-role">"Bạn đời" của Nabnab · Phần 3</div>
+      <p class="char-desc">Được các nhà khoa học tạo ra làm bạn đời cho Nabnab, vì tin rằng nó hung dữ do cô đơn. Ca phẫu thuật bị gián đoạn giữa chừng bởi sự kiện "Bring a Friend Day" — người chơi phải hoàn thành nốt bằng cách pha đúng hỗn hợp Givanium để đánh thức cô. Cuộc đoàn tụ với Nabnab bị cắt ngang khi Jumbo Josh bất ngờ xuất hiện, đánh bất tỉnh và kéo Nabnab đi mất.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#b5484a">
+      <div class="char-name">Hellish Banban</div>
+      <div class="char-role">Dạng mất kiểm soát của Banban · Phần 3, 4, 6</div>
+      <p class="char-desc">Khi bị kích động quá mức, Banban biến hình thành dạng ác quỷ: thân hình to hơn, màu tối sẫm, sừng dài hơn, vẻ mặt hung tợn, hoàn toàn mất lý trí, chỉ còn bản năng săn mồi. Xuất hiện lần đầu ở cuối Phần 3, sau đó còn tái diễn ở Phần 4 (đuổi đánh Nabnab) và gián tiếp gợi lại qua chính mũi tiêm nó dùng để biến Nabnab thành Hellish ở Phần 6.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#c9b23f">
+      <div class="char-name">Queen Bouncelia</div>
+      <div class="char-role">Nữ hoàng Vương Quốc · Phần 4, 6</div>
+      <p class="char-desc">Sinh vật kangaroo khổng lồ màu tím, cai trị "Vương Quốc" — khu vực biệt lập nơi Sheriff Toadster là người bảo vệ duy nhất. Được tạo từ DNA người, kangaroo, và Givanium; túi trước bụng bà chứa một đàn sinh vật nguy hiểm gọi là The Naughty Ones, chỉ chờ bà cười hoặc bị kích động là sổ lồng — điều cuối cùng đã xảy ra ở cuối Phần 4, kéo theo hậu quả xuyên suốt Phần 6.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#6f7dc7">
+      <div class="char-name">Bittergiggle</div>
+      <div class="char-role">Gã hề nổi loạn · Phần 4, 6</div>
+      <p class="char-desc">Mascot mặt hề chia đôi màu — nửa tím cau có, nửa xanh lá cười toe toét — bị ám ảnh bởi mong muốn chọc cười được Queen Bouncelia bằng mọi giá. Ở Phần 4, chính hắn là người vô tình giải phóng The Naughty Ones. Sang Phần 6, hắn quay lại chuộc lỗi, trở thành đồng minh tạm thời, trước khi tự nguyện nhảy xuống vực để làm "khán giả" cho chính đàn quái vật mình đã thả ra.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#9a9c8a">
+      <div class="char-name">Kittysaurus</div>
+      <div class="char-role">Đồng minh của Bittergiggle · Phần 4</div>
+      <p class="char-desc">Sinh vật mèo khổng lồ, hung hãn, đồng minh trung thành của Bittergiggle. Bị đánh bại bằng cách dụ nó lao đầu vào tường nhiều lần. Sau khi Little Beak rơi vào thùng Givanium và biến hình, chính Kittysaurus là đối thủ đầu tiên nó lao vào tấn công.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#d98a3f">
+      <div class="char-name">Tamataki & Chamataki</div>
+      <div class="char-role">Rồng hai đầu · Phần 3, 4</div>
+      <p class="char-desc">Sinh vật lai mang hình dáng rồng với hai chiếc đầu riêng biệt. Bị đánh bại ở Phần 3 bằng cách nhồi pháo hoa vào miệng cho đến khi rơi xuống Abyss — nhưng "sống lại" đầy bất ngờ ngay đầu Phần 4, đuổi theo Yuki qua một hành lang cam trước khi bị kẹt lại vì quá khổ để lọt qua khúc cua hẹp.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#d9a5c2">
+      <div class="char-name">Tarta Bird</div>
+      <div class="char-role">Bạn đời của Opila Bird · Phần 3</div>
+      <p class="char-desc">Con chim to lớn, lông sẫm màu hơn Opila Bird, xuất hiện bảo vệ đàn chim con cùng Opila. Bị Yuki "thuần hóa" bằng cách nhảy lên lưng giữ thăng bằng cho đến khi nó dịu lại. Đến cao trào cuối Phần 3, nó bị rung lắc và rơi khỏi độ cao giữa trận chiến hỗn loạn, buộc Opila Bird phải lao xuống cứu, để lại chim con một mình với Yuki.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#8a5fc2">
+      <div class="char-name">The Beak (Little Beak)</div>
+      <div class="char-role">Chim con → sinh vật biến hình · Phần 3, 4</div>
+      <p class="char-desc">Chú chim con được để lại với Yuki sau khi Opila Bird lao xuống cứu Tarta Bird ở cuối Phần 3. Yuki mang nó theo suốt hành trình Phần 4, cho đến khi nó vô tình rơi vào thùng Givanium trong phòng ngai vàng — biến thành một sinh vật khổng lồ, cánh tím sẫm tua rách, mỏ và chân vàng, lông mày trắng dựng đứng. Từ đó, nó không còn là chim con để bế nữa, và cuối cùng lạc mất giữa cơn hỗn loạn khi Vương Quốc sụp đổ.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#b54a7a">
+      <div class="char-name">Sir Dadadoo</div>
+      <div class="char-role">Thủ lĩnh The Naughty Ones · Phần 6</div>
+      <p class="char-desc">Nhân vật mới xuất hiện ở Phần 6 — dáng người cao lớn, thanh lịch một cách kỳ dị, ánh mắt lạnh lẽo đầy thù hận. Là thủ lĩnh thật sự của The Naughty Ones, xuất hiện đòi lại quyền trượng và trả thù những kẻ từng phản bội mình. Ở cao trào cuối chương, hắn dẫn theo cả một đội quân mascot đã bị "Naughtified" quay lại tấn công Banban.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#7a9ac2">
+      <div class="char-name">Syringeon</div>
+      <div class="char-role">"The Surgeon" — chưa xuất hiện trực tiếp · Nhắc đến từ Phần 3</div>
+      <p class="char-desc">Được nhắc đến xuyên suốt từ Phần 3 (thí nghiệm Givanium) đến Phần 6 (nắm giữ mảnh còn thiếu của quyền trượng), nhưng chưa từng xuất hiện trực tiếp trong hành trình của Yuki. Là mục tiêu tìm kiếm tiếp theo ngay khi Phần 6 khép lại.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#5f8a5c">
+      <div class="char-name">Truffletoot</div>
+      <div class="char-role">Chỉ nhắc đến gián tiếp · Phần 0</div>
+      <p class="char-desc">Nhân vật gắn liền với Chapter 0 — phần tiền truyện không thuộc hành trình chính của Yuki, nhưng cùng chia sẻ bối cảnh cơ sở thí nghiệm Givanium.</p>
+    </div>
+
+    <div class="char-card" style="--accent:#c8c6b8">
+      <div class="char-name">Flumbo</div>
+      <div class="char-role">Nhân vật chính của Chapter 0</div>
+      <p class="char-desc">Case 6C — "The Anti-Devil". Là nhân vật người chơi điều khiển trong Chapter 0 (phần tiền truyện), không phải Yuki. Bị nhốt trong một chiếc tủ quần áo bởi Banban ngay cuối Chapter 0, và chỉ được giải thoát rất lâu sau đó ở Chapter 8.</p>
+    </div>
+
+  </div>
+
+  <div class="lore-box" style="margin-top:2.5rem;">
+    <div class="lore-title">Mural: không lớn dần, chỉ thêm mascot</div>
+    <p>Danh sách trên là toàn bộ nhân vật đã xuất hiện xuyên suốt hành trình của Yuki, từ Phần 1 đến Phần 6, cùng các nhân vật liên quan từ Chapter 0. Sáu gương mặt gốc trên Mural của Chapter 1 vẫn luôn là phiên bản hoàn hảo nhất — các mascot xuất hiện thêm ở các Phần sau chỉ được vẽ bổ sung, không thay thế "đội hình gốc" ấy. Xem chi tiết ở tab <strong>"Các Phần"</strong>.</p>
+  </div>
+</div>
+
+<!-- ============ CÁC PHẦN ============ -->
+<div class="view" id="view-parts">
+  <h1 class="section-title">Các Phần Của Garten of Banban</h1>
+  <p class="section-sub">Bối cảnh gốc mà "Lời Ru Trong Bóng Tối" lấy cảm hứng.</p>
+
+  <div class="sub-nav" id="partNav">
+    <button class="sub-btn active" data-part="1">Phần 1</button>
+    <button class="sub-btn" data-part="2">Phần 2</button>
+    <button class="sub-btn" data-part="3">Phần 3</button>
+    <button class="sub-btn" data-part="4">Phần 4</button>
+    <button class="sub-btn" data-part="6">Phần 6</button>
+    <button class="sub-btn" data-part="7">Phần 7</button>
+    <button class="sub-btn" data-part="0">Phần 0</button>
+    <button class="sub-btn" data-part="8">Phần 8</button>
+    <button class="sub-btn" data-part="9">Phần 9</button>
+    <button class="sub-btn" data-part="cases">Danh Mục Case</button>
+  </div>
+
+  <!-- Phần 1 -->
+  <article class="subview active" id="part-1">
+    <div class="chapter-eyebrow">Chapter 1 — The Kindergarten</div>
+    <h2>Điểm Khởi Đầu</h2>
+    <p>Chapter 1 mở ra toàn bộ series: một phụ huynh bước vào ngôi trường mẫu giáo bí ẩn Banban Kindergarten để tìm con mất tích. Ngay tại sảnh chính, người chơi bắt gặp Mural đầu tiên — bức tranh giới thiệu sáu linh vật của trường, mỗi con kèm một khẩu hiệu thân thiện. Hành trình dẫn qua Playroom, nơi Opila Bird canh giữ nhiệm vụ thu thập 6 quả trứng, rồi bùng nổ thành màn rượt đuổi nghẹt thở trên cây cầu ván gỗ bắc qua vực. Phần kết thúc bằng cảnh thang máy bị Jumbo Josh phá hủy — một cái kết mở đầy ám ảnh.</p>
+    <div class="lore-box">
+      <div class="lore-title">Mural ở Chapter 1</div>
+      <p>Phiên bản Mural trong Chapter 1 chỉ gồm sáu gương mặt: Jumbo Josh, Banban, Banbaleena, Opila Bird, Stinger Flynn, và Captain Fiddles — "đội hình gốc", đơn giản nhất trong toàn series.</p>
+    </div>
+  </article>
+
+  <!-- Phần 2 -->
+  <article class="subview" id="part-2">
+    <div class="chapter-eyebrow">Chapter 2 — The Depths</div>
+    <h2>Mở Đầu — Sau Khi Thang Máy Rơi</h2>
+    <p>Tiếp nối Phần 1, người chơi tỉnh dậy sau cú rơi của thang máy. Họ nằm trên một nền nâng công nhân (Worker Lift) đang đè lên chính Jumbo Josh — con quái vật xanh khổng lồ — lúc này bị thương nặng và bất tỉnh. Người chơi nhặt lại chiếc remote điều khiển drone cùng một tấm keycard, rồi lần bước vào khu vực trung tâm gọi là The Hub, nằm sâu trong cơ sở ngầm khổng lồ bên dưới nhà trẻ Banban.</p>
+
+    <h2>Communications Sector — "Người Bảo Vệ" Giả</h2>
+    <p>Người chơi bước vào khu Communications. Qua hệ thống loa và camera, một giọng nói cất lên — tự xưng là nhân viên bảo vệ đang bị mắc kẹt — yêu cầu người chơi vẫy tay trước camera để xác nhận có nghe thấy. "Người bảo vệ" nói mình bị nhốt trong phòng an ninh vì cửa cần một tấm keycard xanh nhạt, và hứa sẽ giúp tìm con nếu được giải cứu. Ông ta hướng dẫn người chơi giải đố từng bước để mở cửa, lấy được keycard xanh lá, và tiến vào Maintenance Room.</p>
+
+    <h2>Maintenance Room — Nabnab Rình Rập</h2>
+    <p>Trong Maintenance, Nabnab — sinh vật nhện xanh ba mắt — bất ngờ xuất hiện từ bóng tối và lao tới đuổi theo. Người chơi phải vừa chạy trốn vừa giải các cơ chế cơ khí để thoát thân. Rải rác trên tường và trên bàn làm việc là những dòng ghi chú cảnh báo rằng con nhện này là có thật, không phải chuyện bịa. Sau một hồi trốn chạy nghẹt thở, người chơi lấy được tấm keycard cần thiết và quay ngược trở lại phòng an ninh.</p>
+
+    <h2>Sự Thật Về "Người Bảo Vệ"</h2>
+    <p>Nhưng khi bước vào phòng, không có ai cả. Chỉ có một tờ ghi chú đầy khả nghi để lại trên bàn. Ngay khi người chơi vừa đọc xong, Banban — phiên bản thật, không còn là giọng nói qua loa — xuất hiện từ phía sau và ra tay đánh bất tỉnh người chơi, để lấy họ làm "mẫu vật" hoàn hảo cho một cuộc phẫu thuật nào đó. Hắn đưa thân thể bất tỉnh của người chơi đến Medical Sector.</p>
+
+    <h2>Medical Sector — Captain Fiddles Và Givanium</h2>
+    <p>Người chơi tỉnh dậy trong khu Medical. Tại đây, họ khám phá và giải đố xoay quanh Captain Fiddles — vừa có phiên bản nhỏ dạng ếch/thủy thủ, vừa có một phiên bản khổng lồ màu cyan. Mục tiêu của cơ sở, theo những gì người chơi lần ra được, là trích xuất Givanium — chất lỏng dùng để "làm sống" các mascot — từ chính cơ thể những con Captain Fiddles nhỏ, một quá trình dẫn đến cái chết của chúng. Các báo cáo ca bệnh rải rác quanh phòng (được đánh số như Case 6, Case 10, Case 12G) hé lộ tỷ lệ thành công cực thấp của việc hồi sinh mascot bằng Givanium, cùng những thất bại từng xảy ra — trong đó có cả Nabnab. Xen giữa là những dòng ghi chú của nhân viên, đầy sợ hãi khi nhắc đến Abyss — vực thẳm bên dưới cơ sở — và những thứ đang sống ở đó.</p>
+
+    <h2>Testing Sector — Lớp Học Của Banbaleena</h2>
+    <p>Người chơi tiến vào Testing Sector, khu vực giống một lớp học. Banbaleena xuất hiện, kéo người chơi vào ngồi như một học sinh mới, đưa ra hàng loạt bài học kỳ quặc: toán học, khoa học, và cả những bài "đạo đức" với câu hỏi lệch lạc. Cô đe dọa trừng phạt nặng nếu người chơi trả lời sai hoặc phá vỡ quy tắc — không được nói, không được thở mạnh, không được hỏi lại. Giữa lúc đó, một tiếng động lạ vang lên khiến Banbaleena phải rời đi kiểm tra. Người chơi tranh thủ khoảnh khắc ấy để thoát khỏi lớp học.</p>
+
+    <h2>Phòng Opila Bird Con & Bức Thư Của Con</h2>
+    <p>Người chơi tìm thấy một căn phòng có sáu quả trứng — sáu con Opila Bird con. Đưa từng con vào tổ khiến Opila Bird mẹ xuất hiện, nhưng vì mải chăm con, nó tạo ra khoảng hở để người chơi lách qua. Ở một vài đoạn tối sau đó, Opila mẹ vẫn đuổi theo dai dẳng. Trong hành trình, người chơi nhặt được một mẩu ghi chú viết tay từ chính con mình — nội dung trấn an rằng con vẫn ổn, một người bạn khác tên Claire cũng ổn, và một "con sứa tốt bụng" đã cứu chúng khỏi Big Bird cùng một kẻ màu đỏ độc ác, đang đưa chúng về nơi trú ẩn của chính con sứa ấy.</p>
+
+    <h2>Căn Phòng Mural & Câu Đố Đếm Chi Tiết</h2>
+    <p>Trên đường đi, người chơi bước vào một căn phòng rộng lớn với bức <strong>Mural</strong> khổng lồ — vẽ đủ đại gia đình linh vật của cơ sở. Để mở cánh cửa tiếp theo, người chơi phải quan sát kỹ và đếm chính xác số lượng các chi tiết trên từng nhân vật — số mắt, số ngón tay, số chiếc mũ — rồi nhập kết quả làm mật mã vào bảng điều khiển bên cạnh.</p>
+
+    <h2>Assembly Room — Sự Thật Của Banban</h2>
+    <p>Người chơi đến được Assembly Room. Một hồi còi báo động ASSEMBLY vang lên, mọi cửa tự động khóa lại, các lối đi bí mật mở ra và các sinh vật trong cơ sở dần hội tụ về đây. Chính giữa phòng là một chiếc bánh sinh nhật khổng lồ, trên đỉnh có cặp tượng nhỏ hình Banban và Banbaleena đang khiêu vũ, phát ra tiếng nhạc hộp nhạc leng keng đều đặn. Căn phòng khá rộng, và chừng một phần năm diện tích ở một góc bị ngăn riêng ra bởi một vách kính lớn, tạo thành một khoang kín tách biệt. Sau một khoảng chờ, tấm nền nâng công nhân từ từ trồi lên qua khe sàn phía sau vách kính ấy, chở theo Banban hiện dần ra trước mắt người chơi.</p>
+    <p>Đây là đoạn thoại dài nhất của Banban trong toàn Phần 2. Trước tiên là lời xin lỗi: <em>"Tôi nợ cô một lời xin lỗi vì chuyện lúc nãy. Cú đấm đó không phải thù ghét gì cá nhân đâu... tôi chỉ cần chiếc drone và thẻ truy cập của cô thôi."</em> Sau đó là lời giải thích về những đứa trẻ và chất Givanium: <em>"Những đứa trẻ con người... chúng đang ở dưới đó, trong Vực Thẳm. Tôi đang cố tiếp cận chúng trước khi quá muộn, nhưng chất Givanium... nó đang biến đổi chúng tôi. Nó khiến chúng tôi mất kiểm soát."</em> Hắn thừa nhận biết rõ người chơi đến đây để tìm con, và bản thân hắn cũng đang cố cứu chúng.</p>
+    <p>Banban tiết lộ: có "ai đó" mạnh hơn hắn rất nhiều đang giữ những đứa trẻ ở sâu tít dưới Abyss. Hắn chỉ đường cho người chơi đi qua lối của Opila Bird để đến một thang máy khác, hẹn sẽ gặp lại ngay tại khoang kính này, chỉ là ở một tầng sâu hơn — rồi tấm nền nâng công nhân hạ trở xuống khe sàn, mang hắn khuất dần sau lớp kính.</p>
+
+    <h2>Chương Truy Đuổi I — "Ngươi Luôn Là Học Sinh Hư"</h2>
+    <p>Người chơi vừa quay lưng khỏi Assembly Room thì một tiếng động dữ dội vang lên phía sau — cánh cửa phòng học cũ bị đạp tung khỏi bản lề, mảnh gỗ vỡ vụn văng tứ tung trên sàn. Banbaleena đứng sừng sững giữa khung cửa, thân hình trắng toát run lên vì giận dữ, đôi tai linh vật dựng đứng, và đôi mắt vốn dịu dàng giờ trợn lên đầy ác ý.</p>
+    <p><em>"Ngươi luôn là học sinh hư!"</em> — cô rít lên, giọng nói méo đi giữa tiếng cười gằn và tiếng gầm gừ trộn lẫn — <em>"Bỏ lớp giữa giờ! Không xin phép! Ta sẽ dạy cho ngươi một bài học mà ngươi không bao giờ quên!"</em></p>
+    <p>Cô lao tới với tốc độ không tưởng so với vóc dáng mảnh khảnh của mình, hai tay vươn dài ra như móng vuốt. Người chơi chỉ kịp né sang một bên trước khi bàn tay ấy đập vỡ tan một chiếc bàn học bằng kim loại ngay sát đó.</p>
+    <p>Không còn đường lùi, người chơi lao vào một dãy hành lang hẹp, ngoằn ngoèo chẻ thành nhiều ngách — có đoạn hai lối rẽ, có đoạn tới ba. Phần lớn các ngách dẫn qua những khoảng sàn lát đầy cửa sập khóa kín, và không phải tấm nào cũng an toàn: một số hoàn toàn vô hại, số khác lại là bẫy chết người, sẵn sàng bung tung bất cứ lúc nào người chơi đến quá gần. Banbaleena đuổi sát phía sau, giọng cô vang vọng khắp hành lang như một bài giảng bị bóp méo: <em>"Học sinh không được chạy trong hành lang! Học sinh không được la hét! Học sinh không được... KHÔNG VÂNG LỜI!"</em></p>
+    <p>Người chơi phải vừa chạy vừa đoán đường, né những tấm cửa sập rung lên bất thường, trong khi Banbaleena vẫn bám sát, tốc độ gần như không hề chậm lại, tiếng quát của cô giờ đã chuyển thành một điệp khúc lặp đi lặp lại đầy ám ảnh: <em>"Bad student. Bad student. BAD STUDENT!"</em></p>
+
+    <h2>Chương Truy Đuổi II — Bàn Tay Của Jumbo Josh</h2>
+    <p>Ở một ngã rẽ, một tấm cửa sập ngay dưới chân người chơi bất chợt rung lên dữ dội đúng lúc vừa đặt chân lên — chỉ kịp nhảy sang bên trong gang tấc. Banbaleena đã bắt kịp, không cần chọn ngách nào nữa, chỉ đơn giản húc thẳng qua mọi khúc rẽ, khoảng cách rút ngắn lại từng giây: <em>"Ngươi nghĩ có thể trốn khỏi lớp học của ta sao? Không ai được phép bỏ học giữa chừng! KHÔNG — AI — CẢ!"</em></p>
+    <p>Ngay khoảnh khắc bàn tay Banbaleena vươn tới, chỉ còn cách vai người chơi vài phân, một tiếng nổ chát chúa vang lên ngay phía trên đầu — trần nhà bung toác thành từng mảnh, và một cánh tay khổng lồ màu xanh lá, thô ráp, đầy vết sẹo cũ, thò thẳng xuống từ khoảng tối phía trên.</p>
+    <p>Đó là Jumbo Josh. Không một lời cảnh báo, những ngón tay to như thân cây siết chặt quanh thân hình mảnh khảnh của Banbaleena, nhấc bổng cô thẳng lên trên, xuyên qua lỗ hổng vừa phá ra trên trần. Tiếng thét thất thanh của cô vọng lại, xa dần, cho đến khi bị nuốt chửng vào khoảng tối phía trên và tắt hẳn.</p>
+    <p>Một tấm thẻ từ rơi xuống từ khoảng hổng trên trần, văng ra khỏi người Banbaleena trong lúc bị kéo lên. Người chơi nhặt lấy, lần theo hành lang còn lại đến một cánh cửa duy nhất không có bẫy sập nào xung quanh — trên cửa in hình Opila Bird. Sau cánh cửa là một tấm nền nâng công nhân khác đang chờ sẵn. Người chơi bước lên, nhấn nút điều khiển — tấm nền hạ xuống, chìm dần vào bóng tối sâu hơn của cơ sở, khép lại trọn vẹn Chapter 2 và mở ra khởi đầu của Chapter 3.</p>
+
+    <div class="lore-box">
+      <div class="lore-title">Các yếu tố lore chính được hé lộ</div>
+      <p>Cơ sở là nơi thí nghiệm biến các mascot thành sinh vật sống bằng Givanium — phần lớn thí nghiệm thất bại hoặc không ổn định. Sự kiện mang tên "Bring a Friend Day" từng dẫn đến một thảm họa: mascot nổi loạn, hố sụp xuống tận Abyss, kéo theo cả trẻ em lẫn nhân viên. Ít nhất hai đứa trẻ của người chơi được xác nhận còn sống, đang được một "con sứa" — có liên hệ tới Stinger Flynn — che chở. Và có lẽ quan trọng nhất: đến cuối Phần 2, Banban không còn hoàn toàn thù địch với người chơi — cả hai có một mục tiêu chung, dù động cơ và phương pháp của hắn vẫn còn nhiều điều đáng ngờ.</p>
+    </div>
+
+    <div class="lore-box">
+      <div class="lore-title">Mural không "lớn hơn" — chỉ có thêm mascot</div>
+      <p>Mural trong Chapter 2 — nằm trong một Mural Room riêng — không phải là một phiên bản "hoàn thiện" hay "lớn nhất" của bức tranh gia đình. Nó vẫn giữ nguyên sáu gương mặt gốc từ Chapter 1, chỉ bổ sung thêm vài mascot khác được vẽ chen vào về sau. Sáu nhân vật ở Mural gốc của Chapter 1 vẫn luôn là những hình vẽ hoàn hảo, được chăm chút kỹ nhất — còn các mascot thêm vào ở Chapter 2 chỉ mang tính bổ sung, không thay thế "đội hình gốc" ấy.</p>
+      <div class="mural-diff">
+        <div>
+          <h4>Mural Chapter 1 (gốc, hoàn hảo nhất)</h4>
+          <ul><li>Jumbo Josh</li><li>Banban</li><li>Banbaleena</li><li>Opila Bird</li><li>Stinger Flynn</li><li>Captain Fiddles</li></ul>
+        </div>
+        <div>
+          <h4>Mural Chapter 2 (gốc + mascot bổ sung)</h4>
+          <ul><li>Banban</li><li>Banbaleena</li><li>Opila Bird</li><li>Jumbo Josh</li><li>Captain Fiddles</li><li>Stinger Flynn</li><li>+ vài mascot khác được vẽ thêm</li></ul>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Phần 3 -->
+  <article class="subview" id="part-3">
+    <div class="chapter-eyebrow">Chapter 3 — Failed Experiments</div>
+    <h2>Tầng Thấp Nhất Còn Hoạt Động</h2>
+    <p>Người chơi tiếp tục từ thang máy ở cuối Phần 2, xuống tầng cuối cùng vẫn còn chức năng trước sự kiện "Bring a Friend Day". Banban liên lạc qua hệ thống giám sát — không gặp mặt trực tiếp. Ông giải thích mình dễ bị "bản năng bạo lực" chi phối (ám chỉ dạng Hellish sau này), nên tự nhốt trong phòng giám sát để giúp từ xa mà không gây nguy hiểm. Banban hướng dẫn người chơi đến Aquatic Sector tìm Stinger Flynn — con sứa khổng lồ — vì chỉ nó mới biết vị trí chính xác của những đứa trẻ.</p>
+    <p>Người chơi tìm pin cho remote drone, giải đố lấy keycard, khởi động cáp treo (cable car) và tiến vào khu vực.</p>
+
+    <h2>Gặp Stinger Flynn & Ảo Giác Bãi Biển</h2>
+    <p>Người chơi đánh thức Stinger Flynn qua kiosk liên lạc. Nó đưa người chơi vào một phân cảnh ảo giác — giấc mơ bãi biển yên bình mà nó gọi là "ngôi nhà" của mình. Ở dạng nhỏ hơn, Stinger tâm sự về việc bị buộc phải làm những điều trái bản chất trong bóng tối của cơ sở, về việc chưa từng được ánh nắng thật chạm vào da, và mong ước được sống một cuộc sống đơn giản. Nó nói cần những đứa trẻ để đạt được điều đó, hứa sẽ giữ ít nhất một người lớn còn sống và tỉnh táo để đưa các em lên mặt đất — rồi khuyên người chơi nên bỏ cuộc, quên hết mọi thứ về nơi này trong khi vẫn còn cơ hội.</p>
+    <p>Người chơi được điều khiển Stinger một lúc trong đoạn flashback ngắn — một minigame bắn pháo/cannon, dùng khả năng bắn tia điện của Stinger vào các mục tiêu để thoát khỏi ký ức đó. Sau đó, người chơi tỉnh lại ở thực tại.</p>
+
+    <h2>Khu Vực Của Sheriff Toadster</h2>
+    <p>Người chơi bị đưa vào một khu vực giống nhà tù, mang phong cách trò chơi của Sheriff Toadster: nhiệm vụ là "bắt 10 tên tội phạm" — thực chất là thu thập 10 chiếc xô màu hồng có mắt — rồi bỏ vào nhà giam. Giải đố, tìm công tắc ẩn dưới bàn để mở cửa tiếp. Rải rác quanh đó là các ghi chú và băng ghi âm về một Case liên quan đến việc tiêm Givanium cùng DNA người vào một con cóc, nhằm tạo ra phiên bản sống của Sheriff Toadster.</p>
+
+    <h2>Phẫu Thuật Nabnaleena</h2>
+    <p>Banban — giả giọng như một vị tiến sĩ tên Uthman Adam — giải thích rằng các nhà khoa học từng nghĩ Nabnab hung dữ vì cô đơn, nên đã tạo ra Nabnaleena để làm bạn đời cho nó. Ca phẫu thuật bị gián đoạn giữa chừng trong sự kiện Bring a Friend Day; phần khó nhất đã hoàn thành, người chơi chỉ cần pha đúng hỗn hợp Givanium theo thứ tự màu và nồng độ, rồi tiêm để "đánh thức" cô ta.</p>
+    <p>Nabnaleena sống dậy. Người chơi nhận một băng cassette mang tên "Spider Assembly", mang về Aquatic Sector phát qua loa lounge để gọi một cuộc tập hợp. Nabnab và Nabnaleena gặp nhau lần đầu. Banban buông một câu nhận xét rằng lẽ ra chúng nên là một cặp đột biến. Ngay lúc đó, Jumbo Josh bất ngờ lao lên từ Abyss, đánh bất tỉnh Nabnab và kéo nó đi mất — Nabnaleena hoảng loạn chạy về phòng của Nabnab, cửa đóng sầm lại.</p>
+
+    <h2>Ảo Giác Thứ Hai — Chuyến Xe Sa Mạc</h2>
+    <p>Vì người chơi vẫn không chịu từ bỏ, Stinger Flynn lại đưa họ vào một giấc mơ thứ hai: tỉnh dậy ở ghế sau một chiếc xe đang chạy xuyên sa mạc, với Stinger cầm lái, Banban ngồi cạnh, cùng Opila Bird, Captain Fiddles, và Nabnab đuổi theo phía sau. Nhóm trò chuyện vui vẻ như một hội bạn đi chơi xa — Banban hỏi bao giờ đến "bãi biển", Stinger thừa nhận đang bị lạc đường. Khi Banban và Opila trêu chọc rằng "đừng bao giờ tin một con sứa", Stinger nổi giận quay lại quát, khiến xe đâm thẳng vào một cây xương rồng khổng lồ.</p>
+    <p>Người chơi lại được điều khiển Stinger trong một đoạn ngắn — lần này là một hành lang có 4 công tắc mang biểu tượng tia sét, một số công tắc di chuyển hoặc xoay nhanh, đòi hỏi bắn tia điện đúng lúc để kích hoạt và mở cửa tiếp.</p>
+
+    <h2>Đối Đầu Tamataki & Chamataki</h2>
+    <p>Người chơi bước vào một phòng chiến đấu với Tamataki và Chamataki — một sinh vật lai dạng rồng hai đầu. Theo hướng dẫn ghi trên tường, người chơi thu thập 3 quả pháo hoa, lần lượt đặt lên lưỡi của từng đầu để chúng nuốt và phát nổ từ bên trong. Sau ba lần, sinh vật sụp đổ và rơi thẳng xuống Abyss. Người chơi lấy được một chiếc mũ tiệc dành cho Mr. Kabob Man.</p>
+
+    <h2>Cuộc Đua Chim & Gặp Lại Opila</h2>
+    <p>Dùng Mr. Kabob Man để dụ một con Opila Chick chạy ra khỏi sự bảo vệ của Opila Bird và Tarta Bird, người chơi bắt được chim con — khiến Tarta Bird nhảy xuống đuổi theo. Người chơi nhảy lên lưng Tarta Bird để "thuần hóa" nó, rồi Opila Bird cũng nhảy xuống; người chơi đặt chim con trở lại lưng Opila.</p>
+    <p>Ngay lúc đó, Stinger Flynn nổi lên từ Abyss, một xúc tu đang nắm chặt Banban bất tỉnh. Stinger giải thích rằng Banban đã âm thầm giúp người chơi tiến đến đây suốt cả chương — nhưng thực chất, đầu óc Banban chỉ nghĩ đến một thứ duy nhất: tụy của người chơi. Stinger nói mình đã lấy được từ Banban thông tin quan trọng — cách tránh để bản thân biến thành dạng mất kiểm soát như hắn.</p>
+
+    <h2>Sự Trỗi Dậy Của Hellish Banban</h2>
+    <p>Ngay giữa lúc đang nói, Stinger buông tay, thả Banban rơi xuống. Banban không hề bị thương — thay vào đó, hắn lập tức biến hình thành Hellish Banban: thân hình to hơn hẳn, màu tối sẫm, sừng dài hơn, vẻ mặt hung tợn, chiếc mũ cao rơi mất. Nó lập tức lao tới đuổi theo người chơi, Opila Bird và Tarta Bird.</p>
+    <p>Cuộc rượt đuổi diễn ra qua hàng loạt phòng thí nghiệm và hành lang, với cơ chế các cánh cửa phát sáng màu xanh ngọc (Tarta Bird phải đi trước) hoặc màu hồng (Opila Bird phải đi trước) — người chơi phải tăng hoặc giảm tốc đúng lúc để hai con chim qua cửa theo đúng thứ tự, nếu sai sẽ bị khóa điều khiển và Hellish Banban bắt kịp. Nó vừa đuổi vừa gầm gừ những lời đe dọa ám ảnh, đại ý rằng dù người chơi có chạy đến đâu, mùi hương từ họ vẫn sẽ luôn thu hút nó.</p>
+
+    <h2>Jumbo Josh Đối Đầu Hellish Banban</h2>
+    <p>Nhóm chạy thoát đến khu vực an toàn hơn ngay khi Hellish Banban suýt bắt kịp — đúng lúc đó, Jumbo Josh xuất hiện. Banban dạng ác quỷ lao thẳng vào cắn cổ Jumbo Josh trong cơn điên loạn hoàn toàn theo bản năng, nhưng Jumbo Josh áp đảo dễ dàng: hất tung nó ra, đập mạnh xuống sàn nhiều lần, chuẩn bị tung đòn kết liễu.</p>
+    <p>Stinger Flynn — vẫn ở dạng khổng lồ — can thiệp, hét lớn bảo cả hai dừng lại. Nhưng Jumbo Josh không nghe: nó tóm lấy Stinger dù kích thước rất lớn, ném mạnh xuống sàn và tiếp tục ra đòn. Giữa lúc hỗn chiến, Tarta Bird bị rung lắc dữ dội và rơi từ trên cao xuống; Opila Bird lập tức nhảy xuống cứu, để lại chú chim con một mình với người chơi trên cao — chú chim con này về sau sẽ được biết đến với cái tên Little Beak.</p>
+    <p>Người chơi đứng trên cao chứng kiến toàn bộ trận chiến mà không thể can thiệp. Hellish Banban bị đánh trọng thương nặng nề, gần như sắp chết dưới tay Jumbo Josh; Stinger Flynn — dù to lớn hơn nhiều — cũng bị đánh bại khá dễ dàng. Trận chiến ngắn ngủi nhưng mang tính biểu tượng cao, phơi bày sức mạnh vượt trội của Jumbo Josh, sự mất kiểm soát hoàn toàn của Banban, và việc ngay cả Stinger Flynn cũng không phải bất khả chiến bại.</p>
+
+    <h2>Lối Ra</h2>
+    <p>Người chơi không thể xuống can thiệp. Một cánh cửa worker lift gần đó mở ra. Trên tường gần lối đi có dòng chữ cảnh báo, đại ý: tìm vương quốc, tìm Sheriff, đừng để gã hề tìm thấy — ám chỉ những sự kiện sẽ xảy ra ở Chapter 4. Người chơi cùng Little Beak bước vào lối đi, tiếp tục xuống sâu hơn vào những tầng đã bị bỏ hoang từ lâu.</p>
+
+    <div class="lore-box">
+      <div class="lore-title">Các yếu tố lore chính được hé lộ</div>
+      <p>Stinger Flynn (Case 13) được tạo từ DNA người, sứa, và Givanium — nhanh chóng trở nên thông minh và có nhận thức cao hơn hẳn các thí nghiệm khác. Nhiều báo cáo Case khác nhắc đến sự bất ổn ngày càng tăng của Banban (Case 6 — "The Devil"), cùng lý do cơ sở tạo ra các cặp đôi như Nabnaleena. Stinger muốn "giải phóng" bản thân và đưa trẻ em — có lẽ cả một số mascot — ra thế giới bên ngoài, trong khi Banban ngày càng mất kiểm soát vì cơn đói Givanium và bản năng nguyên thủy của chính mình. Chương này cũng giới thiệu thêm những cái tên mới như Queen Bouncelia (mới chỉ qua tranh/ảnh), Zolphius, và Mr. Kabob Man.</p>
+    </div>
+
+    <div class="lore-box">
+      <div class="lore-title">Ghi chú Mural</div>
+      <p>Đến Chapter 3, các khu vực Mural không còn xuất hiện dày đặc như hai phần đầu — câu chuyện tập trung vào các phòng thí nghiệm và hồ sơ nghiên cứu, nơi danh tính thật của từng linh vật trên Mural dần được làm rõ.</p>
+    </div>
+  </article>
+
+  <!-- Phần 4 -->
+  <article class="subview" id="part-4">
+    <div class="chapter-eyebrow">Chapter 4 — Queen Bouncelia</div>
+    <h2>Rượt Đuổi & Thẩm Vấn</h2>
+    <p>Người chơi cùng Little Beak tiếp tục xuống tầng mới ngay từ thang máy cuối Phần 3. Tamataki & Chamataki — con rồng hai đầu tưởng đã rơi xuống Abyss — lập tức đuổi theo qua một hành lang cam, nhưng cả hai thoát được khi con rồng bị kẹt ở một đoạn hành lang hẹp. Người chơi nhặt được một remote drone màu vàng, nhưng ngay sau đó bị khí gas làm bất tỉnh và bị Sheriff Toadster kéo đi.</p>
+    <p>Tỉnh dậy trong phòng thẩm vấn, người chơi được Sheriff Toadster hỏi sáu câu hỏi dạng Yes/No về những mascot đã từng gặp. Sau đó, Toadster dẫn người chơi đến Vương Quốc (the Kingdom).</p>
+
+    <h2>Nữ Hoàng Của Vương Quốc</h2>
+    <p>Tại phòng ngai vàng, Queen Bouncelia — một sinh vật kangaroo khổng lồ màu tím — tự giới thiệu là người cai trị Vương Quốc, còn Toadster là người bảo vệ duy nhất. Bà nhận ra người chơi đang tìm con, tha bổng và ban quyền công dân danh dự. Đổi lại, bà yêu cầu người chơi cùng Toadster đi tìm ba bộ phận còn thiếu của một chiếc thang máy để có thể lên các tầng trên.</p>
+
+    <h2>Sự Nổi Loạn Của Bittergiggle</h2>
+    <p>Trong hành trình thu thập ba bộ phận qua nhiều khu vực — Ventilation, Housing, Feeding, Employee Exercise — người chơi chạm trán Banban đang cố liên lạc với Zolphius để gửi tặng Mr. Kabob Man cho ai đó, nhưng Nabnab bất ngờ cướp lấy món quà. Banban đuổi theo, biến thành dạng Hellish, đánh Nabnab bất tỉnh và ném vào tường.</p>
+    <p>Người chơi cũng gặp Bittergiggle (Case 17 — "The Jester"), đang trong trạng thái nổi loạn, quyết tâm kể một câu chuyện cười cho Queen Bouncelia nghe bất chấp lệnh cấm tuyệt đối — bởi nếu nữ hoàng cười, những sinh vật trong túi của bà sẽ sổ lồng. Đồng minh của hắn, Kittysaurus, chặn đường người chơi; con vật bị đánh bại bằng cách dụ nó lao đầu vào tường đủ bốn lần.</p>
+    <p>Rải rác trong các khu vực là những ghi chú của nhân viên cũ, kể về sự phản bội của đồng nghiệp khi thảm họa xảy ra ở tầng trên, và nhắc đến một "khuôn mặt khổng lồ trôi lơ lửng" — ám chỉ Zolphius. Một ghi chú khác đáng chú ý hơn cả là các báo cáo về việc từng cân nhắc dùng chính trẻ em làm nguồn hiến gen, cùng thư từ trao đổi bí mật giữa Uthman Adam và một người tên Waverly Mason, bàn về việc giám sát chặt chẽ nhân viên khác.</p>
+
+    <h2>Cao Trào — Bittergiggle Thành Công</h2>
+    <p>Khi lấy được bộ phận cuối cùng và quay về phòng ngai vàng, người chơi phát hiện Bittergiggle và Kittysaurus đã xông vào trước. Little Beak vô tình rơi vào một thùng Givanium, biến thành một quái vật khổng lồ màu tím, lao vào đánh Kittysaurus. Giữa hỗn loạn đó, Bittergiggle kể một câu chuyện cười rất vụng về — nhưng dù câu chuyện tệ đến đâu, Queen Bouncelia vẫn bật cười.</p>
+    <p>Túi của bà bùng nổ thành một luồng ánh sáng tím — The Naughty Ones, đàn sinh vật nguy hiểm giấu trong đó, ồ ạt thoát ra, gây hỗn loạn khắp Vương Quốc.</p>
+
+    <h2>Kết Thúc</h2>
+    <p>Bittergiggle đuổi theo người chơi và Toadster giữa cảnh hỗn loạn. Toadster mở tung toàn bộ cửa phòng giam ở khu y tế để tạo thêm hỗn loạn hòng dễ bề thoát thân — và vô tình thả luôn Stinger Flynn, vẫn đang bị giam từ trước. Cả ba — người chơi, Toadster, và Stinger Flynn — kịp lao vào thang máy vừa lắp xong và đi xuống sâu hơn ngay trước khi Bittergiggle bắt kịp. Chapter 4 khép lại với cảnh Vương Quốc sụp đổ hoàn toàn vì The Naughty Ones được thả ra, và người chơi tiếp tục hành trình cùng Sheriff Toadster và Stinger Flynn.</p>
+
+    <div class="lore-box">
+      <div class="lore-title">Case Note quan trọng</div>
+      <p><strong>Case 14 — Nữ Hoàng:</strong> Queen Bouncelia được tạo từ DNA người, kangaroo, và Givanium. Ban đầu ổn định, nhưng túi trước bụng bà chứa các sinh vật nguy hiểm gọi là "The Naughty Ones" — nếu bà cười hoặc bị kích động quá mức, chúng sẽ thoát ra. Vì vậy bà bị đưa xuống tầng sâu để cách ly. Cây quyền trượng của bà có tính chất đặc biệt, từng bị các nhà khoa học tịch thu để nghiên cứu riêng.</p>
+      <p><strong>Case 9 — Cảnh Sát Trưởng:</strong> Sheriff Toadster được tạo từ DNA cóc, người, và Givanium, bị chiếu phim cao bồi liên tục để hình thành nhân cách "thực thi luật pháp". Kết quả là anh cực kỳ bảo vệ các mascot khác và coi mọi người ngoài là tội phạm tiềm tàng — phương pháp bắt giữ quá bạo lực nên bị đày xuống tầng sâu này.</p>
+    </div>
+
+    <div class="lore-box">
+      <div class="lore-title">Nhân vật mới của Phần 4</div>
+      <p><strong>Sheriff Toadster</strong> — chính thức debut sau hai phần chỉ xuất hiện gián tiếp, giữ vai trò gần như bạn đồng hành xuyên suốt chương. <strong>Queen Bouncelia</strong> và <strong>Bittergiggle</strong> đóng vai trò trung tâm của cốt truyện — Bittergiggle là một mascot mặt hề chia đôi màu tím/xanh lá, bị ám ảnh bởi mong muốn chọc cười được Queen Bouncelia. <strong>Kittysaurus</strong> là đồng minh của Bittergiggle. Zolphius và Tamataki & Chamataki chỉ giữ vai trò phụ. Đáng chú ý, nhân vật phản diện Charles từ tựa game Choo-Choo Charles cũng xuất hiện trong một phân đoạn giấc mơ, nhờ một sự hợp tác giữa hai studio.</p>
+    </div>
+
+    <div class="lore-box">
+      <div class="lore-title">Ghi chú Mural</div>
+      <p>Khu vực của Queen Bouncelia có phong cách trang trí riêng biệt, tách khỏi hệ Mural cổ điển ở Chapter 1–2 — như một "nhánh gia đình" khác của cơ sở. Đáng chú ý, Nabnaleena — dù đã xuất hiện sống động từ Phần 3 — ở Phần 4 chỉ còn được nhắc đến qua hình vẽ trên Mural, không xuất hiện trực tiếp trong bất kỳ phân đoạn nào.</p>
+    </div>
+  </article>
+
+  <!-- Phần 6 -->
+  <article class="subview" id="part-6">
+    <div class="chapter-eyebrow">Chapter 6 — The Vault</div>
+    <p class="section-sub" style="margin-bottom:1.5rem;">(Chapter 5 chưa từng phát hành — series nhảy thẳng từ 4 sang 6)</p>
+
+    <h2>Xuống Tầng Mới</h2>
+    <p>Người chơi và Sheriff Toadster bước ra khỏi thang máy. Toadster thừa nhận thẳng thắn: những gì đang xảy ra ở các tầng trên khiến anh sợ hãi thật sự. Mục tiêu duy nhất lúc này là tìm cho được Queen's Scepter — cây quyền trượng của Nữ hoàng — thứ duy nhất có thể phong ấn lại The Naughty Ones đã sổ lồng.</p>
+
+    <h2>Bittergiggle Hối Lỗi</h2>
+    <p>Ở Introduction Sector, người chơi gặp lại Bittergiggle — lần này hoàn toàn khác trước. Anh ta dằn vặt vì đã gián tiếp giải phóng The Naughty Ones ở Chapter 4, và muốn chuộc lỗi. Bittergiggle trở thành đồng minh tạm thời, cùng người chơi kích hoạt hàng loạt công tắc để mở đường đến phòng chứa quyền trượng.</p>
+
+    <h2>Những Khu Vực Công Tắc</h2>
+    <p>Hành trình dẫn qua nhiều khu vực — Conditioning Sector, Potentiality Sector, và một số khu puzzle ánh sáng khác — mỗi nơi đòi hỏi kích hoạt toàn bộ công tắc ẩn trước khi cửa mở. Trong lúc này, người chơi bắt gặp những "Givanium Infants" — các sinh vật sơ sinh được tạo từ Givanium, một hình ảnh gây ám ảnh giữa cả chuỗi thử nghiệm. Có cả một nhiệm vụ phụ liên quan đến Syringeon — thu thập kẹo mút rải khắp phòng phẫu thuật để "làm hài lòng bệnh nhân".</p>
+
+    <h2>Phòng Quyền Trượng</h2>
+    <p>Người chơi, Banban, và Bittergiggle mở được hộp trưng bày chứa Queen's Scepter. Nabnab bất ngờ xuất hiện, nhấn liên tục nút "eject" trên bảng điều khiển — quyền trượng bật ra nhưng thiếu mất một mảnh. Bittergiggle nhận ra ngay mảnh còn thiếu đang nằm trong tay Syringeon.</p>
+
+    <h2>Sir Dadadoo Và Đội Quân</h2>
+    <p>Ngay sau đó, Sir Dadadoo xông vào phòng — không đơn độc, mà cùng cả một đám The Naughty Ones theo sau. Ông ta tuyên bố đến để đoạt lại quyền trượng và trả thù tất cả những kẻ từng phản bội mình nhiều năm trước, đe dọa sẽ ăn thịt Kittysaurus nếu Bittergiggle không khai ra vị trí của Sheriff Toadster và "The Surgeon" — tức Syringeon.</p>
+
+    <h2>Mũi Tiêm Bí Mật</h2>
+    <p>Banban giả vờ thân thiết tiến lại gần Nabnab, rồi bất ngờ rút ống tiêm Givanium đâm thẳng vào nó. Con nhện lập tức biến thành dạng Hellish khổng lồ, lao thẳng vào tấn công Sir Dadadoo — tạo ra khoảng trống quý giá để cả nhóm chạy thoát.</p>
+
+    <h2>Cuộc Rượt Đuổi & Bittergiggle Nhảy Xuống</h2>
+    <p>Người chơi, Banban, và Bittergiggle chạy qua một khu vườn bụi rậm, chỉ một Naughty One tách khỏi bầy đuổi sát phía sau. Cả nhóm đến được khu vực có hai giếng thang máy — một cái còn cabin, một cái trống. Ngay trước cửa cabin an toàn, Bittergiggle dừng lại, nói rằng The Naughty Ones mới là khán giả thực sự biết cười trước chuyện của mình — đây là cơ hội duy nhất để có khán giả thật — rồi nhảy thẳng xuống giếng thang máy trống, biến mất vào Abyss.</p>
+
+    <h2>Cao Trào Cuối Cùng & Banban Hy Sinh</h2>
+    <p>Người chơi và Banban bước vào thang máy còn lại. Đèn phụt tắt rồi bật sáng trở lại — Sir Dadadoo xuất hiện cùng toàn bộ đội quân đã bị Naughtified: Bittergiggle (đã bị nhiễm), Banbaleena, Opila Bird, Tarta Bird, Kittysaurus, Nabnaleena, Tamataki & Chamataki, cùng vô số Naughty Ones khác. Sir Dadadoo tuyên bố sẽ biến cả Banban và người chơi thành một phần của đội quân ấy.</p>
+    <p>Banban đẩy người chơi vào sâu trong thang máy, tự mình ở lại cầm chân toàn bộ đội quân. Đám quân lao vào cào xé Banban dã man. Anh hét lên lời dặn cuối cùng: "Tìm Syringeon." Thang máy đóng lại, đi xuống tầng sâu hơn. Màn hình tối dần, khép lại một trong những đoạn kết bi tráng nhất của cả series tính đến thời điểm đó.</p>
+
+    <div class="lore-box">
+      <div class="lore-title">Các nhân vật bị Naughtified</div>
+      <p>Khi Sir Dadadoo xuất hiện lần cuối, gần như toàn bộ các mascot đã bị kiểm soát: Bittergiggle, Banbaleena, Opila Bird, Tarta Bird, Kittysaurus, Nabnaleena, Tamataki & Chamataki, cùng vô số Naughty Ones khác. Chỉ còn Banban (đã hy sinh ở lại), người chơi, và một số rất ít chưa kịp bị nhiễm.</p>
+    </div>
+
+    <div class="lore-box">
+      <div class="lore-title">Case Report trong Chapter 6</div>
+      <p><strong>Case 14 — Nữ Hoàng (Update 11, 15, 17):</strong> xuất hiện ở Introduction Sector và Conditioning Sector, nói về tình trạng của Nữ hoàng, túi chứa The Naughty Ones, và hậu quả sau khi chúng thoát ra.</p>
+      <p><strong>Case 8 — Nabnab (Update 2, 4, 5):</strong> nằm ở Potentiality Sector gần khu vực thẻ đỏ/tím, nói về hành vi hung hăng, sự cô đơn, và thí nghiệm tạo cặp Nabnaleena.</p>
+      <p><strong>Case 4 — Syringeon / The Surgeon (Update 2, 3):</strong> nằm quanh phòng phẫu thuật ở Conditioning Sector, nói về điểm KAS thấp khiến ông bị coi là không phù hợp trình diễn, việc nguồn lực bị chuyển sang Case 13, và việc ông tự tạo ra các "Case 4B — Givanium Citizens".</p>
+      <p>Ngoài ra còn có Letter of Defeat và các ghi chú nhân viên ở Storage Bay, cùng một Child's Note đầy cảm xúc ở Introduction Sector.</p>
+    </div>
+
+    <div class="lore-box">
+      <div class="lore-title">Drone trong Chapter 6</div>
+      <p>Drone vẫn được dùng nhưng không còn là trọng tâm như Chapter 4 — chủ yếu để nhấn công tắc ở vị trí cao/xa và hỗ trợ vài puzzle ánh sáng, không có đoạn điều khiển dài hay combat bằng drone.</p>
+    </div>
+  </article>
+
+  <!-- Phần 7 -->
+  <article class="subview" id="part-7">
+    <div class="chapter-eyebrow">Chapter 7 — Final Descent</div>
+
+    <h2>Gặp Syringeon Lần Đầu</h2>
+    <p>Nối tiếp trực tiếp từ cái kết bi tráng của Chapter 6, tầng -5 đã bị đội quân Naughtified của Sir Dadadoo chiếm đóng hoàn toàn. Người chơi tỉnh dậy trong bóng tối, phát hiện mình đang nằm trên bàn phẫu thuật của Syringeon — "The Surgeon" — đang thao thao về sự "may mắn" khi được trở thành một phần trong công trình của hắn, trước khi nhầm lẫn dụng cụ khiến trợ lý của hắn thiệt mạng. Giữa hỗn loạn đó, người chơi tận dụng cơ hội chạy trốn, rồi quay lại cứu chính Syringeon khỏi một con quái vật đang truy đuổi cả hai.</p>
+
+    <h2>Kế Hoạch & Remote Control 2.0</h2>
+    <p>Cảm kích vì được cứu, Syringeon tiết lộ mình đang giữ mảnh quyền trượng cuối cùng, và không có ý định để nó rơi vào tay Sir Dadadoo. Kế hoạch của hắn: tìm lại một sinh vật "màu xanh, khổng lồ" — chính là Jumbo Josh — từng tấn công thành phố nhỏ nơi họ đang đứng (gọi là Cityngeon), rồi dùng nó làm vũ khí chống lại đội quân của Dadadoo. Syringeon trao cho người chơi một thiết bị mới — Remote Control 2.0 — cho phép truy cập các bảng điều khiển theo một cách hoàn toàn khác, rồi cử người chơi đi dò hỏi các nhân chứng trong thành phố.</p>
+
+    <h2>Cityngeon — Những Nhân Chứng</h2>
+    <p>Người chơi lần lượt gặp gỡ nhiều cư dân Givanium Citizens kỳ quặc của Cityngeon: một nhân chứng ngoài phố yêu cầu đổi thông tin lấy giấy vẽ; một người pha chế quầy bar khinh miệt loài người nhưng chịu hợp tác sau khi thấy giấy tờ tùy thân; một cư dân khách sạn bị làm phiền bởi tiếng ồn từ căn hộ trên lầu (hóa ra là do Hellish Bittergiggle gây ra, khiến một cư dân khác sợ hãi chui xuống gầm giường suốt phần còn lại của câu chuyện); một người đang tham gia "cuộc thi nhìn chằm chằm" với đối thủ bất động là Mr. Kabob Man; và một nhân viên phòng vé rạp hát hướng người chơi đến khán phòng duy nhất chưa bị phong tỏa.</p>
+
+    <h2>Trojan Tarta — Vở Kịch Định Mệnh</h2>
+    <p>Tại rạp hát, một cư dân say mê nghệ thuật nhờ người chơi giúp vở kịch được diễn ra để đổi lấy một chiếc vòng cổ định vị. Vở kịch mang tên "Jonasan with an S" kể về một nhân vật quyết tâm mang món quà bí ẩn đi thật xa trước khi mở ra. Nhưng ngay giữa buổi diễn, "món quà" ấy — thực chất là một con chim Tarta Bird giả (Trojan Bird) — bắt đầu rung lắc dữ dội rồi biến thành Tarta Bird khổng lồ thật sự, tấn công khán phòng. Người chơi hạ được nó và thu về chiếc vòng cổ định vị cần thiết.</p>
+
+    <h2>Tool Mart & Người Thợ Săn</h2>
+    <p>Chiếc vòng cổ dẫn đến một cửa hàng dụng cụ, nơi một đội thợ săn tiền thưởng do Syringeon cử đến trước đó đã mất tích không rõ tung tích. Người chơi một mình vào trong, tìm thấy một mẫu Givanium — dấu vết của Jumbo Josh bị thương trong lúc chạy trốn bóng tối — trước khi chạm mặt người thợ săn cuối cùng còn sống sót, chỉ kịp thều thào một lời cảnh báo đầy ám ảnh rằng chính người chơi mới là kẻ đang bị săn đuổi.</p>
+
+    <h2>Cái Bẫy Cho Jumbo Josh</h2>
+    <p>Syringeon giải thích thêm về nguồn gốc của mình — từng là một trong những Case bị cơ sở bỏ rơi xuống các tầng dưới, rồi được "tái sử dụng" nhờ bốn cánh tay cơ khí không biết mệt mỏi, và chính hắn là người từng trực tiếp tạo ra Jumbo Josh. Hắn tẩm mẫu Givanium đã thu được lên chính mảnh quyền trượng cuối cùng, biến nó thành mồi nhử đủ mạnh để thu hút cả Jumbo Josh lẫn khứu giác nhạy bén của Nữ hoàng. Kế hoạch có phần liều lĩnh: cố tình dâng mảnh quyền trượng cho Sir Dadadoo để dẫn dụ hắn — cùng toàn bộ đội quân — đến đúng vị trí đã định.</p>
+
+    <h2>Jumbo Josh Đối Đầu Đội Quân Naughtified</h2>
+    <p>Sir Dadadoo xuất hiện cùng toàn bộ đội quân, tưởng chừng đã chiến thắng khi nhận được mảnh quyền trượng. Nhưng đúng lúc đó, Jumbo Josh xuất hiện, đấm ngực gầm lên một tiếng chấn động rồi lao thẳng vào trận chiến. Nó đấm thẳng vào mặt Kittysaurus, hất văng con vật vào tường; khi Banbaleena nhảy vào cản đường, Jumbo Josh túm lấy và ném cô bay đi; Nabnaleena bò khắp người nó cố gây rối loạn nhưng không mảy may làm nó chậm lại; Tamataki & Chamataki cùng lao tới ép nó vào tường, chỉ để bị phản đòn dữ dội — một cú đấm thẳng vào miệng bẻ gãy cả hàm, đánh gục ngay tại chỗ. Cuối cùng, Jumbo Josh túm lấy chính Sir Dadadoo, quật xuống đất và giáng liên tiếp những cú đấm cho đến khi hắn hoàn toàn bất động.</p>
+
+    <h2>Kết Thúc & Post-Credit</h2>
+    <p>Sau trận chiến, Syringeon xác nhận: kế hoạch thành công, dù cây quyền trượng đã bị phá hủy trong quá trình — điều mà chính hắn cho rằng "tốt hơn", vì không ai nên nắm giữ quyền lực lớn đến vậy. Toàn bộ những sinh vật từng bị kiểm soát ("Naughtified") trở lại bình thường, xác của The Naughty Ones nằm rải rác khắp thành phố nhỏ. Đây là lần đầu tiên sau rất lâu, Syringeon thừa nhận mình không còn cảm thấy sợ hãi cho tính mạng bản thân.</p>
+    <p>Trong lúc nghỉ ngơi, người chơi phát hiện một cánh cửa bí mật. Syringeon cảnh báo không nên đụng vào, buông một câu cảnh báo bí ẩn — "đừng bao giờ đùa với ác quỷ" — nhưng người chơi vẫn mở cửa, dẫn thẳng vào khởi đầu của Chapter 8: Anti Devil.</p>
+
+    <div class="lore-box">
+      <div class="lore-title">Minh bạch về nguồn tư liệu</div>
+      <p>Tính đến thời điểm trang này được cập nhật, chỉ có <strong>3 trên tổng số 12 ghi chú</strong> của Chapter 7 được xác nhận đầy đủ nội dung từ wiki chính thức — 9 ghi chú còn lại chưa có nguồn xác thực nên không được đưa vào đây. Sự kiện "Baby Chase" — được liệt kê là một trong bốn sự kiện chính của chương — cũng chưa có mô tả chi tiết đáng tin cậy nên không được đưa vào tóm tắt này. Ngoài ra, <strong>không có Case Update Report nào</strong> được ghi nhận cho riêng Chapter 7 — hệ thống Case Update Report trong toàn series chỉ xuất hiện ở Chapter 0, 2, 3, 4, và 6.</p>
+    </div>
+
+    <div class="lore-box">
+      <div class="lore-title">3 Ghi chú đã xác nhận</div>
+      <p><strong>Child's Note 7:</strong> một lá thư khác của cùng đứa trẻ đã viết ở Phần 4 — lần này giọng văn đầy sợ hãi, hỏi mẹ đang ở đâu, nhắc rằng "con sứa" (Stinger Flynn) cũng đã biến mất, và mọi người xung quanh — bạn Claire, cô giáo Miss Mason — đều đang hoảng sợ.</p>
+      <p><strong>Boastful Note:</strong> lời tự sự đầy tự mãn của một người tự nhận là bậc thầy đứng sau việc "chế tạo" các sinh vật, nói rằng đã đến lúc phô bày toàn bộ kế hoạch của mình, dù chỉ có chính những "đứa con" do ông tạo ra mới là khán giả — và tự hỏi liệu mình có đang mất trí hay không.</p>
+      <p><strong>Letter About Growth Rate:</strong> ghi chú lo lắng giữa hai nhân viên về việc một sinh vật nào đó đang lớn nhanh bất thường — tiếng khóc và tiếng động ngày càng khó giấu — và bàn về việc cần tìm ai đó trông chừng nó bằng những vật liệu bỏ hoang sẵn có dưới tầng ngầm.</p>
+    </div>
+
+    <div class="lore-box">
+      <div class="lore-title">Dàn nhân vật của Chapter 7</div>
+      <p><strong>Nhân vật mới:</strong> Syringeon (Case 4 — "The Surgeon", trung tâm của chương), Givanium Citizens (Case 4B, do Syringeon tạo ra), cùng các khái niệm "Givanium Infants" và "Givanium Baby".</p>
+      <p><strong>Nhân vật cũ quay lại:</strong> Banban, Nabnab, Sheriff Toadster, Opila Bird cùng đàn Opila Chicks, Captain Fiddles, Stinger Flynn, Queen Bouncelia, Bittergiggle (dưới dạng Hellish, đã chết), Sir Dadadoo (phản diện chính), Tarta Bird (dưới dạng Trojan Tarta), Kittysaurus, Truffletoot, Jumbo Josh (vũ khí bí mật), Zolphius, Mr. Kabob Man, Tamataki & Chamataki, Nabnaleena, và The Naughty Ones.</p>
+    </div>
+  </article>
+
+  <!-- Phần 0 -->
+  <article class="subview" id="part-0">
+    <div class="chapter-eyebrow">Chapter 0 — Origins &nbsp;·&nbsp; Prequel</div>
+    <h2>Khởi Nguồn</h2>
+    <p class="section-sub" style="margin-bottom:1.5rem;">Phát hành sau Chapter 7, trước Chapter 8 — đúng theo thứ tự phát hành thực tế ngoài đời, dù về mặt dòng thời gian, đây là sự kiện xảy ra sớm nhất trong toàn series.</p>
+    <p>Khác với các Phần chính — nơi người chơi luôn vào vai một phụ huynh đi tìm con — Chapter 0 đặt người chơi vào một nhân vật hoàn toàn khác: Flumbo, một sinh vật thú bông nhồi bông (sau này được xác nhận là Case 6C — "The Anti-Devil"). Câu chuyện lùi về quá khứ rất xa, trước khi Banban Kindergarten trở thành nơi tăm tối như trong các Phần sau.</p>
+    <p>Mở đầu bằng một căn phòng nhỏ biệt lập, nơi Flumbo phải trả lời các bảng khảo sát hằng ngày hiện trên màn hình — không khí gợi nhớ đến một cơ sở quan sát hành vi khép kín. Dần dần, Flumbo gặp những phiên bản trẻ hơn nhiều của các nhân vật quen thuộc: Banban (khi đó vẫn còn là Case 6) và Banbaleena (Case 7), lúc này vẫn còn ngây thơ, chưa bị Givanium làm biến chất hoàn toàn. Chapter 0 cũng lần đầu giới thiệu Truffletoot, những "Givanium Blobs" sơ khai, và một phiên bản của Syringeon — đáng chú ý, Syringeon xuất hiện với hình dạng y hệt như ở Chapter 7, vì đây là một trong những Case đầu tiên được tạo ra, không trải qua giai đoạn "trẻ hóa" như các Case thế hệ sau.</p>
+    <p>Xuyên suốt hành trình, Flumbo dần khám phá ra sự thật đen tối đằng sau nơi được gọi là "trường mẫu giáo" này — và danh tính thật của chính mình.</p>
+    <div class="lore-box">
+      <div class="lore-title">Cái kết nối vào Chapter 8</div>
+      <p>Chapter 0 kết thúc bằng một cảnh có ý nghĩa đặc biệt: Flumbo trốn trong một chiếc tủ quần áo, dùng một chiếc kéo nhặt được để mở nó ra. Không lâu sau, Banban — lúc này đã mất một mắt — tìm đến, mở tủ ra và chào Flumbo bằng một câu nói lạnh lẽo, ngụ ý đã lâu không gặp. Đây chính là khoảnh khắc Flumbo bị nhốt vào chiếc tủ ấy — nơi cậu bị giam giữ suốt nhiều năm, mãi đến khi được giải thoát ở Floor -6 trong Chapter 8: Anti Devil, khi Banban đưa cậu đến gặp Syringeon để "sửa chữa".</p>
+    </div>
+  </article>
+
+  <!-- Phần 8 -->
+  <article class="subview" id="part-8">
+    <div class="chapter-eyebrow">Chapter 8 — Anti Devil</div>
+    <h2>Chương Cuối</h2>
+    <p>Chương khép lại series tính đến hiện tại, đưa người chơi đối đầu với những thế lực mới xuất hiện và tìm lời giải cho những bí ẩn còn sót lại của cả hành trình.</p>
+  </article>
+
+  <article class="subview" id="part-9">
+    <div class="chapter-eyebrow">Chapter 9</div>
+    <h2>Chưa Có Thông Tin</h2>
+    <p class="section-sub" style="margin-bottom:0;">Chương này chưa được công bố hoặc chưa phát hành tại thời điểm trang này được cập nhật. Mục sẽ được bổ sung khi có tư liệu chính thức.</p>
+  </article>
+
+  <article class="subview" id="part-cases">
+    <div class="chapter-eyebrow">Toàn Series</div>
+    <h2>Danh Mục Case Đã Xác Nhận</h2>
+    <p class="section-sub" style="margin-bottom:2rem;">Bảng tổng hợp các Case đã được xác nhận xuyên suốt series, theo hệ thống phân loại nội bộ của cơ sở.</p>
+
+    <h2>Case Type 1 — Givanium</h2>
+    <table style="width:100%; border-collapse:collapse; margin-bottom:2.5rem; font-size:0.9rem;">
+      <tr style="border-bottom:1px solid rgba(168,194,106,0.25);"><th style="text-align:left; padding:0.5rem; color:var(--nursery-glow);">Case</th><th style="text-align:left; padding:0.5rem; color:var(--nursery-glow);">Tên</th><th style="text-align:left; padding:0.5rem; color:var(--nursery-glow);">Chi tiết</th></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 1</td><td style="padding:0.5rem;">Givanium (Gv)</td><td style="padding:0.5rem; color:#c8c6b8;">Chất lỏng cơ bản thay thế máu</td></tr>
+    </table>
+
+    <h2>Case Type 2 — Gv Based-Bodies</h2>
+    <table style="width:100%; border-collapse:collapse; margin-bottom:2.5rem; font-size:0.88rem;">
+      <tr style="border-bottom:1px solid rgba(168,194,106,0.25);"><th style="text-align:left; padding:0.5rem; color:var(--nursery-glow);">Case</th><th style="text-align:left; padding:0.5rem; color:var(--nursery-glow);">Tên</th><th style="text-align:left; padding:0.5rem; color:var(--nursery-glow);">Nhân vật</th><th style="text-align:left; padding:0.5rem; color:var(--nursery-glow);">Genome</th></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 4</td><td style="padding:0.5rem;">The Surgeon</td><td style="padding:0.5rem; color:#c8c6b8;">Syringeon</td><td style="padding:0.5rem; color:#c8c6b8;">Human, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 4B</td><td style="padding:0.5rem;">Givanium Citizens</td><td style="padding:0.5rem; color:#c8c6b8;">Công dân Givanium</td><td style="padding:0.5rem; color:#c8c6b8;">—</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 6</td><td style="padding:0.5rem;">The Devil</td><td style="padding:0.5rem; color:#c8c6b8;">Banban</td><td style="padding:0.5rem; color:#c8c6b8;">Human, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 6B</td><td style="padding:0.5rem;">Hellish Banban</td><td style="padding:0.5rem; color:#c8c6b8;">Trạng thái biến đổi</td><td style="padding:0.5rem; color:#c8c6b8;">—</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 6C</td><td style="padding:0.5rem;">The Anti-Devil</td><td style="padding:0.5rem; color:#c8c6b8;">Flumbo</td><td style="padding:0.5rem; color:#c8c6b8;">Human, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 7</td><td style="padding:0.5rem;">The Teacher</td><td style="padding:0.5rem; color:#c8c6b8;">Banbaleena</td><td style="padding:0.5rem; color:#c8c6b8;">Human, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 8</td><td style="padding:0.5rem;">The Spider</td><td style="padding:0.5rem; color:#c8c6b8;">Nabnab</td><td style="padding:0.5rem; color:#c8c6b8;">Human, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 9</td><td style="padding:0.5rem;">The Sheriff</td><td style="padding:0.5rem; color:#c8c6b8;">Sheriff Toadster</td><td style="padding:0.5rem; color:#c8c6b8;">Human, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 10</td><td style="padding:0.5rem;">The Bird</td><td style="padding:0.5rem; color:#c8c6b8;">Opila Bird</td><td style="padding:0.5rem; color:#c8c6b8;">Human, Phoenicopterus roseus, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 10B–10G</td><td style="padding:0.5rem;">The Chicks</td><td style="padding:0.5rem; color:#c8c6b8;">Opila Chicks</td><td style="padding:0.5rem; color:#c8c6b8;">—</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 11</td><td style="padding:0.5rem;">The Snail</td><td style="padding:0.5rem; color:#c8c6b8;">Slow Seline</td><td style="padding:0.5rem; color:#c8c6b8;">Ốc sên, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 12</td><td style="padding:0.5rem;">The Spider Monkey</td><td style="padding:0.5rem; color:#c8c6b8;">Captain Fiddles' Crew</td><td style="padding:0.5rem; color:#c8c6b8;">Brachyteles hypoxanthus, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 12G</td><td style="padding:0.5rem;">The Child-Monkey</td><td style="padding:0.5rem; color:#c8c6b8;">Captain Fiddles</td><td style="padding:0.5rem; color:#c8c6b8;">Brachyteles hypoxanthus, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 13</td><td style="padding:0.5rem;">The Jellyfish</td><td style="padding:0.5rem; color:#c8c6b8;">Stinger Flynn</td><td style="padding:0.5rem; color:#c8c6b8;">Human, Atlantic Sea Nettle, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 14</td><td style="padding:0.5rem;">The Queen</td><td style="padding:0.5rem; color:#c8c6b8;">Queen Bouncelia</td><td style="padding:0.5rem; color:#c8c6b8;">Human, Macropus rufus, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 17</td><td style="padding:0.5rem;">The Jester</td><td style="padding:0.5rem; color:#c8c6b8;">Bittergiggle</td><td style="padding:0.5rem; color:#c8c6b8;">Human, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 18</td><td style="padding:0.5rem;">The Fancy Leech</td><td style="padding:0.5rem; color:#c8c6b8;">Sir Dadadoo</td><td style="padding:0.5rem; color:#c8c6b8;">Human, Givanium</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 21</td><td style="padding:0.5rem;">The Husband</td><td style="padding:0.5rem; color:#c8c6b8;">Tarta Bird</td><td style="padding:0.5rem; color:#c8c6b8;">—</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 26</td><td style="padding:0.5rem;">The Feline</td><td style="padding:0.5rem; color:#c8c6b8;">Kittysaurus</td><td style="padding:0.5rem; color:#c8c6b8;">—</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 43</td><td style="padding:0.5rem;">The Mushroom</td><td style="padding:0.5rem; color:#c8c6b8;">Truffletoot</td><td style="padding:0.5rem; color:#c8c6b8;">—</td></tr>
+    </table>
+
+    <h2>Case Type 5 — Organ / Body Part</h2>
+    <table style="width:100%; border-collapse:collapse; margin-bottom:2.5rem; font-size:0.9rem;">
+      <tr style="border-bottom:1px solid rgba(168,194,106,0.25);"><th style="text-align:left; padding:0.5rem; color:var(--nursery-glow);">Case</th><th style="text-align:left; padding:0.5rem; color:var(--nursery-glow);">Tên</th></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 3</td><td style="padding:0.5rem; color:#c8c6b8;">Vocal Cords</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 6</td><td style="padding:0.5rem; color:#c8c6b8;">The Heart</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 10–13</td><td style="padding:0.5rem; color:#c8c6b8;">Mechanical Arms (của Syringeon)</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 20</td><td style="padding:0.5rem; color:#c8c6b8;">The Scepter</td></tr>
+    </table>
+
+    <h2>Case Type 6 — Properties of Givanium</h2>
+    <table style="width:100%; border-collapse:collapse; margin-bottom:1rem; font-size:0.9rem;">
+      <tr style="border-bottom:1px solid rgba(168,194,106,0.25);"><th style="text-align:left; padding:0.5rem; color:var(--nursery-glow);">Case</th><th style="text-align:left; padding:0.5rem; color:var(--nursery-glow);">Tên</th></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 22</td><td style="padding:0.5rem; color:#c8c6b8;">Givanium Cloy / Genome Cloy</td></tr>
+      <tr style="border-bottom:1px solid rgba(232,230,216,0.08);"><td style="padding:0.5rem;">Case 27</td><td style="padding:0.5rem; color:#c8c6b8;">Givanium Entrapment</td></tr>
+    </table>
+  </article>
+
+</div>
+
+<script>
+  // top-level tab switching
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const views = document.querySelectorAll('.view');
+  function showView(name){
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.view === name));
+    views.forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+  tabBtns.forEach(btn => btn.addEventListener('click', () => showView(btn.dataset.view)));
+  document.querySelectorAll('[data-goto]').forEach(card => {
+    card.addEventListener('click', () => showView(card.dataset.goto));
+  });
+
+  // chapter switching (Truyện)
+  const chapBtns = document.querySelectorAll('#chapNav .sub-btn');
+  const chapters = document.querySelectorAll('#view-story .subview');
+  function showChapter(n){
+    chapBtns.forEach(b => b.classList.toggle('active', b.dataset.chap === String(n)));
+    chapters.forEach(c => c.classList.toggle('active', c.id === 'chap-' + n));
+    document.getElementById('chapNav').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  chapBtns.forEach(btn => btn.addEventListener('click', () => showChapter(btn.dataset.chap)));
+  document.querySelectorAll('#view-story .next-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => showChapter(Number(e.target.closest('.subview').id.split('-')[1]) + 1));
+  });
+  document.querySelectorAll('#view-story .prev-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => showChapter(Number(e.target.closest('.subview').id.split('-')[1]) - 1));
+  });
+
+  // part switching (Các Phần)
+  const partBtns = document.querySelectorAll('#partNav .sub-btn');
+  const parts = document.querySelectorAll('#view-parts .subview');
+  function showPart(n){
+    partBtns.forEach(b => b.classList.toggle('active', b.dataset.part === String(n)));
+    parts.forEach(p => p.classList.toggle('active', p.id === 'part-' + n));
+    document.getElementById('partNav').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  partBtns.forEach(btn => btn.addEventListener('click', () => showPart(btn.dataset.part)));
+</script>
+
+</body>
+</html>
